@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Background Circle -->
+    <path
+        android:fillColor="#E8F5E9"
+        android:pathData="M54,54m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+
+    <!-- Tree Trunk -->
+    <path
+        android:fillColor="#795548"
+        android:pathData="M52,65 L56,65 L54,85 L52,85 Z" />
+
+    <!-- Palm Leaves -->
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M54,65 Q34,55 24,40 Q44,45 54,55 M54,60 Q29,45 19,25 Q44,35 54,50" />
+
+    <path
+        android:fillColor="#388E3C"
+        android:pathData="M54,65 Q74,55 84,40 Q64,45 54,55 M54,60 Q79,45 89,25 Q64,35 54,50" />
+
+    <!-- Palm Fruits -->
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M48,50 L50,52 L48,54 L46,52 Z" />
+
+    <path
+        android:fillColor="#FF5722"
+        android:pathData="M58,50 L60,52 L58,54 L56,52 Z" />
+
+    <!-- Diagnostic Circle -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#2196F3"
+        android:strokeWidth="2"
+        android:pathData="M75,75 m-12,0 a12,12 0,1 1,24 0 a12,12 0,1 1,-24 0" />
+
+    <!-- Check Mark -->
+    <path
+        android:strokeColor="#2196F3"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M69,75 L73,79 L81,71" />
+
+</vector>
