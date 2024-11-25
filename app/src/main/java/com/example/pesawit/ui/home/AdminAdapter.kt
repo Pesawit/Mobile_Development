@@ -1,12 +1,12 @@
 package com.example.pesawit.ui.home
 
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.pesawit.R
 import com.example.pesawit.model.Article
 
 class AdminAdapter(
@@ -15,7 +15,6 @@ class AdminAdapter(
     private val onDeleteClick: (Article) -> Unit
 ) : RecyclerView.Adapter<AdminAdapter.AdminViewHolder>() {
 
-    // ViewHolder for item_article_admin.xml
     inner class AdminViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTitle: TextView = itemView.findViewById(R.id.tv_title)
         val tvStatus: TextView = itemView.findViewById(R.id.tv_status)
@@ -33,7 +32,7 @@ class AdminAdapter(
 
         // Set data to the views
         holder.tvTitle.text = article.title
-        holder.tvStatus.text = if (article.isPublished) "Published" else "Unpublished"
+        holder.tvStatus.text = article.isPublished  // Langsung gunakan String
 
         // Set listeners for buttons
         holder.btnEdit.setOnClickListener { onEditClick(article) }

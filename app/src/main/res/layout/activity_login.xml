@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background=""
+    android:padding="30dp">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center"
         android:src="@drawable/logo"
         android:contentDescription="App Logo" />
@@ -43,5 +44,5 @@
         android:layout_gravity="center"
         android:paddingTop="16dp"
         android:text="Don't have an account? Register"
-        android:textColor="@color/teal_700" />
+        android:textColor="@color/CherryGrove" />
 </LinearLayout>
