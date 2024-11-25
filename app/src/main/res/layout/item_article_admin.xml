@@ -4,37 +4,46 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@color/WhatFieldSunrise">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Article Title"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/tv_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Published/Unpublished" />
+        android:text="Published/Unpublished"
+        android:textSize="14sp"
+        android:layout_marginTop="4dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:layout_marginTop="8dp">
 
         <Button
             android:id="@+id/btn_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit" />
+            android:text="Edit"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp" />
 
         <Button
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete" />
+            android:text="Delete"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp" />
     </LinearLayout>
 </LinearLayout>

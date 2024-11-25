@@ -4,37 +4,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/white"
+    android:padding="30dp">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center"
         android:src="@drawable/logo"
         android:contentDescription="App Logo" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PESAWIT"
+        android:textAlignment="center"
+        android:textSize="36dp"
+        android:textColor="@color/ForestFern"
+        android:fontFamily="monospace" />
 
     <EditText
         android:id="@+id/et_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
+        android:textColorHint="@color/gray"
         android:inputType="textEmailAddress"
-        android:minHeight="48dp" />
+        android:backgroundTint="@color/teal_700"
+        android:textColor="@color/black"
+        android:minHeight="48dp"
+        android:fontFamily="monospace" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:textColorHint="@color/gray"
         android:inputType="textPassword"
-        android:minHeight="48dp" />
+        android:backgroundTint="@color/teal_700"
+        android:textColor="@color/black"
+        android:minHeight="48dp"
+        android:fontFamily="monospace" />
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login" />
+        android:text="Login"
+        android:backgroundTint="@color/WhatFieldSunrise"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-medium" />
 
     <TextView
         android:id="@+id/tv_register"
@@ -43,5 +64,12 @@
         android:layout_gravity="center"
         android:paddingTop="16dp"
         android:text="Don't have an account? Register"
-        android:textColor="@color/teal_700" />
+        android:textColor="@color/CherryGrove"
+        android:fontFamily="sans-serif-light" />
+
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>

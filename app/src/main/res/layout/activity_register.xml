@@ -4,12 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="30dp"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center"
         android:src="@drawable/logo"
         android:contentDescription="App Logo" />
@@ -17,27 +18,63 @@
     <EditText
         android:id="@+id/et_username"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:hint="Username"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/selector_icon_tint"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/black"
+        android:fontFamily="monospace" />
 
     <EditText
         android:id="@+id/et_email"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:inputType="textEmailAddress"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/selector_icon_tint"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/black"
+        android:fontFamily="monospace" />
 
     <EditText
         android:id="@+id/et_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:hint="Password"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/selector_icon_tint"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/black"
+        android:fontFamily="monospace" />
+
+    <EditText
+        android:id="@+id/et_ulangpassword"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:hint="Confirm Password"
+        android:inputType="textPassword"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/selector_icon_tint"
+        android:textColorHint="@color/gray"
+        android:textColor="@color/black"
+        android:fontFamily="monospace" />
 
     <Button
         android:id="@+id/btn_register"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register" />
+        android:layout_height="60dp"
+        android:text="Register"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:backgroundTint="@color/WhatFieldSunrise"
+        android:textColor="@color/white"
+        android:fontFamily="sans-serif-black" />
 </LinearLayout>
