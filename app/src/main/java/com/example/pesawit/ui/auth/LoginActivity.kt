@@ -6,12 +6,12 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pesawit.MainActivity
 import com.example.pesawit.R
 import com.example.pesawit.data.retrofit.ApiConfig
 import com.example.pesawit.data.response.ResponseItem
+import com.example.pesawit.utils.ToastHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,13 +26,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Inisialisasi view
         etEmail = findViewById(R.id.et_email)
         etPassword = findViewById(R.id.et_password)
         btnLogin = findViewById(R.id.btn_login)
         tvRegister = findViewById(R.id.tv_register)
 
-        // Set listener untuk tombol login
         btnLogin.setOnClickListener {
             val email = etEmail.text.toString()
             val password = etPassword.text.toString()
@@ -42,25 +40,24 @@ class LoginActivity : AppCompatActivity() {
                     val user = getUserRole(email, password)
                     runOnUiThread {
                         if (user != null) {
-                            Toast.makeText(this@LoginActivity, "Welcome, ${user.name}", Toast.LENGTH_SHORT).show()
+                            ToastHelper.showToast(this@LoginActivity, "Welcome, ${user.name}")
                             val intent = Intent(this@LoginActivity, MainActivity::class.java)
                             startActivity(intent)
                             finish()
                         } else {
-                            Toast.makeText(this@LoginActivity, "Invalid email or password", Toast.LENGTH_SHORT).show()
+                            ToastHelper.showToast(this@LoginActivity, "Invalid email or password")
                         }
                     }
                 }
+            } else {
+                ToastHelper.showToast(this@LoginActivity, "Please fill all fields correctly")
             }
         }
 
-        // Set listener untuk teks register
         tvRegister.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
-
-
     }
 
     override fun onDestroy() {
@@ -95,5 +92,4 @@ class LoginActivity : AppCompatActivity() {
             null
         }
     }
-
 }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pesawit.R
 import com.example.pesawit.data.retrofit.ApiConfig
+import com.example.pesawit.utils.ToastHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -28,7 +29,6 @@ class RegisterActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.et_password)
         btnRegister = findViewById(R.id.btn_register)
 
-        // Set click listener untuk tombol register
         btnRegister.setOnClickListener {
             val username = etUsername.text.toString()
             val email = etEmail.text.toString()
@@ -46,26 +46,15 @@ class RegisterActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             val apiResponse = response.body()
                             if (apiResponse?.success == true) {
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "Registration successful!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                finish() // Kembali ke halaman login
+                                ToastHelper.showToast(this@RegisterActivity, "Registration successful!")
+                                finish()
                             } else {
-                                Toast.makeText(
-                                    this@RegisterActivity,
-                                    "Registration failed: ${apiResponse?.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                ToastHelper.showToast(this@RegisterActivity, "Registration failed: ${apiResponse?.message}")
                             }
                         } else {
-                            Toast.makeText(
-                                this@RegisterActivity,
-                                "Registration failed: ${response.message()}",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            ToastHelper.showToast(this@RegisterActivity, "Registration failed: ${response.message()}")
                         }
+
                     }
                 }
             }

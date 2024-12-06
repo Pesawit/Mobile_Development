@@ -101,7 +101,7 @@ data class ResponseItem(
 	val article: Article? = null,
 
 	@field:SerializedName("data")
-	val data: Data? = null,
+	val data: DataItem = null,
 
 	@field:SerializedName("image")
 	val image: String? = null,

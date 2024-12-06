@@ -3,13 +3,14 @@ package com.example.pesawit.data.response
 import com.google.gson.annotations.SerializedName
 
 data class ApiResponse<T>(
-    @SerializedName("success")
-    val success: Boolean,
+    @field:SerializedName("success")
+    val success: Boolean? = null,
 
-    @SerializedName("message")
-    val message: String?,
+    @field:SerializedName("message")
+    val message: String? = null,
 
-    @SerializedName("data")
-    val data: T? // Generik untuk fleksibilitas
+    @field:SerializedName("data")
+    val data: T? = null
 )
+
 
