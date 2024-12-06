@@ -10,9 +10,9 @@
         android:label="Home"
         tools:layout="@layout/fragment_home" />
 
-    <fragment
-        android:id="@+id/profileFragment"
-        android:name="com.example.pesawit.ui.profile.ProfileFragment"
+    <activity
+        android:id="@+id/profileActivity"
+        android:name="com.example.pesawit.ui.profile.ProfileActivity"
         android:label="Profile"
         tools:layout="@layout/activity_profile" />
 
