@@ -5,15 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
 import com.example.pesawit.data.response.Article
+import com.example.pesawit.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: RecyclerView.Adapter<*>
+    private lateinit var viewModel: HomeViewModel  // Deklarasi viewMode
 
     // Sample data
     private val dummyArticles: List<Article>
@@ -61,23 +64,24 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Retrieve role passed from MainActivity
-        userRole = arguments?.getString("userRole")
+        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
 
-        recyclerView = view.findViewById(R.id.rv_articles)
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-        // Choose adapter based on user role
-        adapter = if (userRole == "admin") {
-            AdminAdapter(dummyArticles, ::onEditArticle, ::onDeleteArticle)
-        } else {
-            UserAdapter(dummyArticles)
+        // Observe articles LiveData
+        viewModel.articles.observe(viewLifecycleOwner) { articles ->
+            val adapter = if (viewModel.userRole.value == "admin") {
+                AdminAdapter(articles, ::onEditArticle, ::onDeleteArticle)
+            } else {
+                UserAdapter(articles)
+            }
+            recyclerView.adapter = adapter
         }
 
-        recyclerView.adapter = adapter
+        // Set user role from arguments
+        val role = arguments?.getString("userRole") ?: "user"
+        viewModel.setUserRole(role)
+
         return view
     }
-
     private fun onEditArticle(article: Article) {
         // Implement editing logic here
     }
