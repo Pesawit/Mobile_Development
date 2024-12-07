@@ -67,6 +67,14 @@
         android:textColor="@color/CherryGrove"
         android:fontFamily="sans-serif-light" />
 
+
+    <Button
+        android:id="@+id/btn_google_sign_in"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign in with Google"
+        android:layout_gravity="center"/>
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"

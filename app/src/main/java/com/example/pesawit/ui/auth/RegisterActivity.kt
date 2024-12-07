@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pesawit.R
 import com.example.pesawit.data.retrofit.ApiConfig
@@ -41,20 +40,22 @@ class RegisterActivity : AppCompatActivity() {
                         "email" to email,
                         "password" to password
                     )
-                    val response = ApiConfig.apiService.registerUser(requestBody)
+                    // Panggil ApiService dengan konteks aplikasi
+                    val response = ApiConfig.provideApiService(applicationContext).registerUser(requestBody)
                     runOnUiThread {
                         if (response.isSuccessful) {
                             val apiResponse = response.body()
                             if (apiResponse?.success == true) {
                                 ToastHelper.showToast(this@RegisterActivity, "Registration successful!")
-                                finish()
+                                finish() // Menutup activity jika registrasi sukses
                             } else {
+                                Log.e("RegisterError", "Server message: ${apiResponse?.message}")
                                 ToastHelper.showToast(this@RegisterActivity, "Registration failed: ${apiResponse?.message}")
                             }
                         } else {
+                            Log.e("RegisterError", "HTTP error: ${response.code()} - ${response.message()}")
                             ToastHelper.showToast(this@RegisterActivity, "Registration failed: ${response.message()}")
                         }
-
                     }
                 }
             }

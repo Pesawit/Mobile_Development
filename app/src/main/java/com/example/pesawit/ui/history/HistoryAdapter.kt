@@ -23,10 +23,16 @@ class HistoryAdapter : ListAdapter<ResponseItem, HistoryAdapter.HistoryViewHolde
 
     class HistoryViewHolder(private val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ResponseItem) {
-            item.data?.let { data ->
-                binding.tvDate.text = data.createdAt
-                binding.tvPrediction.text = data.title
-                Picasso.get().load(data.image).into(binding.ivImage)
+            item.data.let { data ->
+                if (data != null) {
+                    binding.tvDate.text = data.createdAt
+                }
+                if (data != null) {
+                    binding.tvPrediction.text = data.title
+                }
+                if (data != null) {
+                    Picasso.get().load(data.image).into(binding.ivImage)
+                }
             }
         }
     }

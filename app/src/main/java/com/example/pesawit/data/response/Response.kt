@@ -101,7 +101,7 @@ data class ResponseItem(
 	val article: Article? = null,
 
 	@field:SerializedName("data")
-	val data: DataItem = null,
+	val data: DataItem? = null,
 
 	@field:SerializedName("image")
 	val image: String? = null,
@@ -137,7 +137,10 @@ data class ResponseItem(
 	val name: String? = null,
 
 	@field:SerializedName("confirmPassword")
-	val confirmPassword: String? = null
+	val confirmPassword: String? = null,
+
+	@field:SerializedName("token")
+	val token: String? = null
 ) : Parcelable
 
 @Parcelize

@@ -15,8 +15,6 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import com.example.pesawit.Manifest
-import com.example.pesawit.R
 import com.example.pesawit.databinding.FragmentCameraBinding
 import com.example.pesawit.viewmodel.CameraViewModel
 import java.util.concurrent.ExecutorService
@@ -59,7 +57,7 @@ class CameraFragment : Fragment() {
         if (allPermissionsGranted()) {
             startCamera()
         } else {
-            permissionLauncher.launch(Manifest.permission.CAMERA)
+            permissionLauncher.launch(android.Manifest.permission.CAMERA)
         }
 
         // Set up capture button click listener
@@ -89,6 +87,7 @@ class CameraFragment : Fragment() {
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     viewModel.handleCapturedImage(photoFile)
+                    viewModel.navigateToResultScreen()
                     Toast.makeText(
                         requireContext(),
                         "Photo captured successfully",
@@ -108,7 +107,7 @@ class CameraFragment : Fragment() {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(binding.ivCameraPreview.surfaceProvider)
+                    it.surfaceProvider = binding.viewFinder.surfaceProvider
                 }
 
             imageCapture = ImageCapture.Builder()
@@ -133,21 +132,11 @@ class CameraFragment : Fragment() {
 
     private fun allPermissionsGranted() = ContextCompat.checkSelfPermission(
         requireContext(),
-        Manifest.permission.CAMERA
+        android.Manifest.permission.CAMERA
     ) == PackageManager.PERMISSION_GRANTED
 
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
-    }
-
-    fun onImageSaved(output: ImageCapture.OutputFileResults) {
-        viewModel.handleCapturedImage(photoFile)
-        viewModel.navigateToResultScreen()
-        Toast.makeText(
-            requireContext(),
-            "Photo captured successfully",
-            Toast.LENGTH_SHORT
-        ).show()
     }
 }

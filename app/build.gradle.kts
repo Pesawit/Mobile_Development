@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.example.pesawit"
         minSdk = 26
-        targetSdk = 34 // Disesuaikan dengan compileSdk
+        targetSdk = 33 // Disesuaikan dengan compileSdk
         versionCode = 1
         versionName = "1.0"
 
@@ -54,6 +54,7 @@ dependencies {
     implementation (libs.play.services.base)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
 
 
     // Library Testing
@@ -62,20 +63,24 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     //firebase
-    implementation (libs.firebase.bom) // Firebase BOM
+    implementation (platform(libs.firebase.bom)) // Firebase BOM
 
     // Retrofit untuk API calls
     implementation(libs.retrofit2.retrofit)
     implementation(libs.converter.gson)
 
     // Kotlin Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
 
     // ViewModel dan LiveData
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     // Glide untuk loading gambar
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.glide)
+
+    implementation (libs.picasso)
+
+    implementation (libs.play.services.auth)
 }
