@@ -36,7 +36,7 @@ class RegisterActivity : AppCompatActivity() {
             if (validateInput(username, email, password)) {
                 CoroutineScope(Dispatchers.IO).launch {
                     val requestBody = mapOf(
-                        "username" to username,
+                        "name" to username,
                         "email" to email,
                         "password" to password
                     )
