@@ -9,8 +9,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pesawit.MainActivity
 import com.example.pesawit.R
-import com.example.pesawit.data.retrofit.ApiConfig
 import com.example.pesawit.data.response.ResponseItem
+import com.example.pesawit.data.retrofit.ApiConfig
 import com.example.pesawit.utils.ToastHelper
 import com.example.pesawit.utils.TokenManager
 import com.google.android.gms.auth.GoogleAuthUtil
@@ -18,7 +18,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -107,40 +106,25 @@ class LoginActivity : AppCompatActivity() {
         ).matches()
     }
 
-    // Fungsi untuk mendapatkan role pengguna dan menyimpan token
     private suspend fun getUserRole(email: String, password: String): ResponseItem? {
         return try {
             val requestBody = mapOf("email" to email, "password" to password)
             val response = ApiConfig.provideApiService(applicationContext).loginUser(requestBody)
 
-            Log.d("LoginResponse", "Full Response: $response")
-            Log.d("LoginResponse", "Response Body: ${response.body()}")
-            Log.d("LoginResponse", "Response Code: ${response.code()}")
-
             if (response.isSuccessful) {
                 val apiResponse = response.body()
-                if (apiResponse != null) {
-                    Log.d("LoginResponse", "Data: ${apiResponse.data}")
-                    Log.d("LoginResponse", "Message: ${apiResponse.message}")
-                    Log.d("LoginResponse", "Success: ${apiResponse.success}")
-
-                    if (apiResponse.data != null && !apiResponse.data.token.isNullOrEmpty()) {
-                        TokenManager.saveToken(this@LoginActivity, apiResponse.data.token)
-                        return apiResponse.data
-                    } else {
-                        Log.e("LoginError", "Data missing or token is null")
-                        withContext(Dispatchers.Main) {
-                            ToastHelper.showToast(
-                                this@LoginActivity,
-                                "Invalid login data received."
-                            )
-                        }
+                if (apiResponse != null && apiResponse.data != null && !apiResponse.data.token.isNullOrEmpty()) {
+                    TokenManager.saveToken(this@LoginActivity, apiResponse.data.token)
+                    return apiResponse.data
+                } else {
+                    Log.e("LoginError", "Data missing or token is null")
+                    withContext(Dispatchers.Main) {
+                        ToastHelper.showToast(this@LoginActivity, "Invalid login data received.")
                     }
                 }
             } else {
                 Log.e("LoginError", "HTTP Error: ${response.code()} - ${response.message()}")
             }
-
             null
         } catch (e: Exception) {
             Log.e("LoginError", "Exception during login", e)
@@ -157,7 +141,6 @@ class LoginActivity : AppCompatActivity() {
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
 
-    // Menangani hasil dari Google Sign-In
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RC_SIGN_IN) {
@@ -165,8 +148,13 @@ class LoginActivity : AppCompatActivity() {
             try {
                 val account = task.getResult(ApiException::class.java)
                 if (account != null) {
-                    // Mendapatkan token setelah login sukses
-                    getAuthToken(account)
+                    // Mendapatkan ID token setelah login sukses
+                    val idToken = account.idToken
+                    if (idToken != null) {
+                        // Gunakan idToken untuk autentikasi API
+                        Log.d("AuthToken", "Token: $idToken")
+                        // Misalnya, kirim token ini ke server untuk autentikasi
+                    }
                 }
             } catch (e: ApiException) {
                 Log.e("GoogleSignIn", "Google sign-in failed", e)
