@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
@@ -36,8 +37,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         // Inisialisasi views
-        etEmail = findViewById(R.id.et_email)
-        etPassword = findViewById(R.id.et_password)
+        etEmail = findViewById(R.id.etemail)
+        etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btn_login)
         tvRegister = findViewById(R.id.tv_register)
 
@@ -55,20 +56,32 @@ class LoginActivity : AppCompatActivity() {
 
             if (validateInput(email, password)) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val user = getUserRole(email, password)
-                    runOnUiThread {
-                        if (user != null) {
-                            ToastHelper.showToast(this@LoginActivity, "Welcome, ${user.name}")
-                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else {
-                            ToastHelper.showToast(this@LoginActivity, "Invalid email or password")
+                    try {
+                        val user = getUserRole(email, password)
+                        withContext(Dispatchers.Main) {
+                            if (user != null) {
+                                ToastHelper.showToast(this@LoginActivity, "Welcome, ${user.name}")
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            } else {
+                                ToastHelper.showToast(
+                                    this@LoginActivity,
+                                    "Login failed. Please check your credentials."
+                                )
+                            }
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            ToastHelper.showToast(
+                                this@LoginActivity,
+                                "An error occurred: ${e.message}"
+                            )
                         }
                     }
                 }
             } else {
-                ToastHelper.showToast(this@LoginActivity, "Please fill all fields correctly")
+                ToastHelper.showToast(this@LoginActivity, "Please enter a valid email and password")
             }
         }
 
@@ -89,7 +102,9 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateInput(email: String, password: String): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return email.isNotEmpty() && password.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(
+            email
+        ).matches()
     }
 
     // Fungsi untuk mendapatkan role pengguna dan menyimpan token
@@ -98,26 +113,40 @@ class LoginActivity : AppCompatActivity() {
             val requestBody = mapOf("email" to email, "password" to password)
             val response = ApiConfig.provideApiService(applicationContext).loginUser(requestBody)
 
+            Log.d("LoginResponse", "Full Response: $response")
+            Log.d("LoginResponse", "Response Body: ${response.body()}")
+            Log.d("LoginResponse", "Response Code: ${response.code()}")
+
             if (response.isSuccessful) {
                 val apiResponse = response.body()
-                if (apiResponse?.success == true) {
-                    apiResponse.data?.let {
-                        val token = it.token // Pastikan token diterima
-                        if (!token.isNullOrEmpty()) {
-                            TokenManager.saveToken(this@LoginActivity, token)
+                if (apiResponse != null) {
+                    Log.d("LoginResponse", "Data: ${apiResponse.data}")
+                    Log.d("LoginResponse", "Message: ${apiResponse.message}")
+                    Log.d("LoginResponse", "Success: ${apiResponse.success}")
+
+                    if (apiResponse.data != null && !apiResponse.data.token.isNullOrEmpty()) {
+                        TokenManager.saveToken(this@LoginActivity, apiResponse.data.token)
+                        return apiResponse.data
+                    } else {
+                        Log.e("LoginError", "Data missing or token is null")
+                        withContext(Dispatchers.Main) {
+                            ToastHelper.showToast(
+                                this@LoginActivity,
+                                "Invalid login data received."
+                            )
                         }
                     }
-                    apiResponse.data
-                } else {
-                    Log.e("LoginError", "Error message: ${apiResponse?.message}")
-                    null
                 }
             } else {
-                Log.e("LoginError", "Response failed: ${response.errorBody()?.string()}")
-                null
+                Log.e("LoginError", "HTTP Error: ${response.code()} - ${response.message()}")
             }
+
+            null
         } catch (e: Exception) {
-            Log.e("LoginError", "Exception occurred", e)
+            Log.e("LoginError", "Exception during login", e)
+            withContext(Dispatchers.Main) {
+                ToastHelper.showToast(this@LoginActivity, "An error occurred during login.")
+            }
             null
         }
     }
