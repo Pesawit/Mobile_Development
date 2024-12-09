@@ -42,7 +42,7 @@ class ArticleDetailFragment : Fragment() {
             tvTitle.text = it.title
             tvAuthor.text = "Author: ${it.author}"
             tvContent.text = it.content
-            tvTags.text = "Tags: ${it.tags.joinToString(", ")}"
+            tvTags.text = "Tags: ${it.tags?.joinToString(", ")}"
             tvDate.text = "Published on: ${it.createdAt}"
         }
     }

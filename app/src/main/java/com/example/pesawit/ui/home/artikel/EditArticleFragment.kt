@@ -13,6 +13,7 @@ import com.example.pesawit.R
 import com.example.pesawit.data.response.ArticlesItem
 import com.example.pesawit.ui.home.HomeFragment
 
+
 class EditArticleFragment : Fragment() {
 
     private lateinit var etTitle: EditText
@@ -64,7 +65,7 @@ class EditArticleFragment : Fragment() {
             it.isPublished = isPublished
 
             // Call the ViewModel to update the article
-            it.id?.let { it1 -> (activity as HomeFragment).viewModel.editArticle(it1, it) }
+            (activity as HomeFragment).viewModel.editArticle(it.id, it)
 
             Toast.makeText(requireContext(), "Article updated successfully!", Toast.LENGTH_SHORT).show()
 
