@@ -11,15 +11,65 @@
         android:layout_height="match_parent" />
 
     <ImageView
-        android:id="@+id/iv_camera_preview"
+        android:id="@+id/iv_uploaded_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:visibility="gone" />
 
-    <Button
-        android:id="@+id/btn_capture"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Capture" />
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="16dp"
+        android:background="@color/white3"
+        android:layout_gravity="bottom">
+
+        <ImageButton
+            android:id="@+id/btn_upload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="start"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="Upload Image"
+            android:src="@drawable/ic_upload"
+            tools:ignore="TouchTargetSizeCheck" />
+
+        <ImageButton
+            android:id="@+id/btn_capture"
+            android:layout_width="0dp"
+            android:layout_height="37dp"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:background="?android:attr/selectableItemBackground"
+            android:contentDescription="Capture"
+            android:src="@drawable/ic_camera"
+            tools:ignore="TouchTargetSizeCheck" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="gone"
+        android:padding="16dp">
+
+        <Button
+            android:id="@+id/btn_retry_capture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capture Ulang" />
+
+        <Button
+            android:id="@+id/btn_analyze"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Analisis" />
+    </LinearLayout>
+
 </FrameLayout>

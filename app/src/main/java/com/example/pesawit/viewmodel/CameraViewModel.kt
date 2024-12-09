@@ -18,12 +18,17 @@ class CameraViewModel : ViewModel() {
         )
     }
 
+    fun analyzeImage() {
+        // Implement image analysis logic here, e.g., make API calls or start a new screen.
+        // For example, make an API call to analyze the image
+        // viewModelScope.launch {
+        //     val result = api.analyzeImage(imageFile)
+        //     // Handle the result and show it to the user
+        // }
+    }
+
     fun handleCapturedImage(imageFile: File) {
-        // TODO: Implement image handling logic
-        // For example, you might want to:
-        // - Upload the image to a server
-        // - Save image details to a database
-        // - Trigger navigation to another fragment
+        // You can add your image handling logic here.
     }
 
     fun navigateToResultScreen() {
