@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pesawit.data.response.DataItem
-import com.example.pesawit.data.response.ResponseItem
+import com.example.pesawit.data.response.DetectionHistoryItem
 import com.example.pesawit.databinding.FragmentHistoryBinding
 
 class HistoryFragment : Fragment() {
 
     private lateinit var binding: FragmentHistoryBinding
     private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var historyViewModel: HistoryViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,29 +28,37 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        historyViewModel = ViewModelProvider(this).get(HistoryViewModel::class.java)
+
         historyAdapter = HistoryAdapter()
-        binding.rvHistory.layoutManager = LinearLayoutManager(requireContext())
-        binding.rvHistory.adapter = historyAdapter
+        binding.rvHistory.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = historyAdapter
+        }
 
         loadHistoryData()
     }
 
     private fun loadHistoryData() {
-        // TODO: Implement logic to load history data from ResponseItem
         val dummyData = listOf(
-            ResponseItem(
-                data = DataItem(
-                    image = "https://example.com/image1.jpg",
-                    title = "Hasil Prediksi: Bunga"
-                )
+            DetectionHistoryItem(
+                id = "1",
+                image = "https://example.com/image1.jpg",
+                result = "Prediksi: Bunga",
+                createdAt = "2024-12-09"
             ),
-            ResponseItem(
-                data = DataItem(
-                    image = "https://example.com/image2.jpg",
-                    title = "Hasil Prediksi: Mobil"
-                )
+            DetectionHistoryItem(
+                id = "2",
+                image = "https://example.com/image2.jpg",
+                result = "Prediksi: Mobil",
+                createdAt = "2024-12-08"
             )
         )
-        historyAdapter.submitList(dummyData)
+
+        // Simpan data ke ViewModel
+        dummyData.forEach { historyViewModel.addHistoryItem(it) }
+
+        // Tampilkan data dari ViewModel
+        historyAdapter.submitList(historyViewModel.getHistoryItems())
     }
 }

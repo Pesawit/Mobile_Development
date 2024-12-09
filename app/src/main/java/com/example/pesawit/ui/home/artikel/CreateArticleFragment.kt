@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.pesawit.R
-import com.example.pesawit.data.response.Article
-import com.example.pesawit.viewmodel.HomeViewModel
+import com.example.pesawit.data.response.ArticlesItem
+import com.example.pesawit.viewmodel.viewhome.HomeViewModel
 
 class CreateArticleFragment : Fragment() {
 
@@ -34,22 +35,25 @@ class CreateArticleFragment : Fragment() {
         viewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
 
         btnUploadImage.setOnClickListener {
-            // Logika upload gambar
+            // Implementasi upload gambar
         }
 
         btnPublish.setOnClickListener {
-            val title = etTitle.text.toString()
-            val content = etContent.text.toString()
+            val title = etTitle.text.toString().trim()
+            val content = etContent.text.toString().trim()
+
             if (title.isNotEmpty() && content.isNotEmpty()) {
-                val article = Article(
+                val article = ArticlesItem(
                     title = title,
                     content = content,
                     isPublished = true,
                     createdAt = System.currentTimeMillis().toString()
                 )
+
                 viewModel.createArticle(article)
-                // Kembali ke HomeFragment
                 parentFragmentManager.popBackStack()
+            } else {
+                Toast.makeText(requireContext(), "Title and content cannot be empty!", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -1,15 +1,18 @@
 package com.example.pesawit.ui.history
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pesawit.data.response.ResponseItem
+import com.example.pesawit.R
+import com.example.pesawit.data.response.DetectionHistoryItem
 import com.example.pesawit.databinding.ItemHistoryBinding
+import com.example.pesawit.ui.history.HistoryAdapter.*
 import com.squareup.picasso.Picasso
 
-class HistoryAdapter : ListAdapter<ResponseItem, HistoryAdapter.HistoryViewHolder>(HistoryDiffCallback()) {
+class HistoryAdapter : ListAdapter<DetectionHistoryItem, HistoryViewHolder>(HistoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,28 +25,21 @@ class HistoryAdapter : ListAdapter<ResponseItem, HistoryAdapter.HistoryViewHolde
     }
 
     class HistoryViewHolder(private val binding: ItemHistoryBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ResponseItem) {
-            item.data.let { data ->
-                if (data != null) {
-                    binding.tvDate.text = data.createdAt
-                }
-                if (data != null) {
-                    binding.tvPrediction.text = data.title
-                }
-                if (data != null) {
-                    Picasso.get().load(data.image).into(binding.ivImage)
-                }
-            }
+        fun bind(item: DetectionHistoryItem) {
+            binding.tvDate.text = item.createdAt
+            binding.tvPrediction.text = item.result
+            Picasso.get().load(item.image).placeholder(R.drawable.ic_placeholder).into(binding.ivImage)
         }
     }
 
-    class HistoryDiffCallback : DiffUtil.ItemCallback<ResponseItem>() {
-        override fun areItemsTheSame(oldItem: ResponseItem, newItem: ResponseItem): Boolean {
-            return oldItem.data?.id == newItem.data?.id
+    class HistoryDiffCallback : DiffUtil.ItemCallback<DetectionHistoryItem>() {
+        override fun areItemsTheSame(oldItem: DetectionHistoryItem, newItem: DetectionHistoryItem): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: ResponseItem, newItem: ResponseItem): Boolean {
+        override fun areContentsTheSame(oldItem: DetectionHistoryItem, newItem: DetectionHistoryItem): Boolean {
             return oldItem == newItem
         }
     }
+
 }

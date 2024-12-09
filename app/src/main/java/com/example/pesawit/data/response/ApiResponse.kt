@@ -3,6 +3,7 @@ package com.example.pesawit.data.response
 import com.google.gson.annotations.SerializedName
 
 data class ApiResponse<T>(
+
     @field:SerializedName("message")
     val message: String? = null,
 
@@ -16,6 +17,5 @@ data class ApiResponse<T>(
     val role: String? = null,
 
     @SerializedName("success")
-    val success: Boolean,
-
-    )
+    val success: Boolean
+)

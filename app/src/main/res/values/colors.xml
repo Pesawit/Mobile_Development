@@ -6,13 +6,17 @@
     <color name="selector_icon_tint">#91A97868</color>
     <color name="selector_text_color">#A5623527</color>
     <color name="gray">#4D4D4D</color>
-    <color name="teal_700">#99859D63</color>
+    <color name="teal_700">#74859D63</color>
     <color name="ForestFern">#327039</color>
     <color name="TilledEarth">#133020</color>
-    <color name="WhatFieldSunrise">#F0BE49</color>
+    <color name="WhatFieldSunrise">#BEE0E97F</color>
     <color name="CherryGrove">#DD5C36</color>
-    <color name="back">#A9B38475</color>
+    <color name="back">#3FB38475</color>
     <color name="Mustard">#D2B48C</color>
-    <color name="white2">#D6DECCCC</color>
+    <color name="white2">#757575</color>
     <color name="white3">#ABC2D5BC</color>
+    <color name="gray_light">#D3D3D3</color>
+    <color name="black_secondary">#2A2929</color>
+    <color name="primary">#3C4043</color>
+
 </resources>

@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/back">
+    android:background="@color/white2">
 
     <EditText
         android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white2"
+        android:background="@color/white3"
         android:hint="Article Title"
         android:minHeight="48dp"
         android:padding="12dp"
@@ -24,7 +24,7 @@
         android:hint="Article Content"
         android:textSize="16sp"
         android:padding="12dp"
-        android:background="@color/white2"
+        android:background="@color/white3"
         android:layout_marginTop="12dp"
         android:minHeight="120dp" />
 

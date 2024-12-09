@@ -80,9 +80,11 @@ dependencies {
 
     // Glide untuk loading gambar
     implementation(libs.glide)
-
     implementation (libs.picasso)
-
     implementation (libs.play.services.auth)
 
+    //untuk camera
+    implementation(libs.androidx.camera.core)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
 }
