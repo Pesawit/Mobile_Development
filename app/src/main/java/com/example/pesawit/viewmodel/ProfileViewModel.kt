@@ -1,34 +1,34 @@
 package com.example.pesawit.viewmodel
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.pesawit.data.response.ResponseItem
+import com.example.pesawit.data.response.Profile
 
 class ProfileViewModel : ViewModel() {
 
-    // MutableLiveData untuk menyimpan data user
-    private val _userData = MutableLiveData<ResponseItem>()
-    val userData: LiveData<ResponseItem> = _userData
+    private val _userData = MutableLiveData<Profile>()
+    val userData: LiveData<Profile> = _userData
 
-    // Fungsi untuk mengatur data user
-    fun setUserData(user: ResponseItem) {
+    fun setUserData(user: Profile) {
         _userData.value = user
     }
-    fun updateProfileImage(imageUrl: String) {
-        _userData.value = _userData.value?.copy(image = imageUrl)
-    }
 
-    fun updateUserData(name: String?, email: String?, phone: String?) {
+    fun updateProfileImage(imageUrl: String) {
         _userData.value = _userData.value?.copy(
-            name = name,
-            email = email,
-            noTelp = phone
+            data = _userData.value?.data?.copy(photo = imageUrl)
         )
     }
 
-    // Fungsi untuk melakukan logout
+    fun updateUserData(name: String?, email: String?) {
+        _userData.value = _userData.value?.copy(
+            data = _userData.value?.data?.copy(
+                name = name,
+                email = email
+            )
+        )
+    }
+
     private val _isLoggedOut = MutableLiveData<Boolean>()
     val isLoggedOut: LiveData<Boolean> = _isLoggedOut
 

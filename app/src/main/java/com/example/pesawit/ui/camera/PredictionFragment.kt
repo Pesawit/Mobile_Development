@@ -15,7 +15,7 @@ class PredictionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentPredictionBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -27,10 +27,11 @@ class PredictionFragment : Fragment() {
         val args = PredictionFragmentArgs.fromBundle(requireArguments())
         val imageUri = Uri.parse(args.imageUri)
 
-        // Menampilkan gambar dan hasil prediksi
+        // Menampilkan gambar yang diprediksi
         binding.ivPredictedImage.setImageURI(imageUri)
 
-        // Anda dapat mengganti teks ini dengan hasil prediksi yang sebenarnya
-        binding.tvPredictedResult.text = "Hasil Prediksi: Kanker atau Tidak Kanker" // Replace with actual result
+        // Mengatur hasil prediksi
+        // Ganti "Hasil Prediksi" ini dengan data aktual dari backend atau logika prediksi
+        binding.tvPredictedResult.text = "Hasil Prediksi: Kanker atau Tidak Kanker" // Replace with actual prediction result
     }
 }

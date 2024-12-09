@@ -12,7 +12,7 @@
         android:layout_width="160dp"
         android:layout_height="160dp"
         android:layout_gravity="center"
-        android:src="@drawable/img"
+        android:src="@drawable/ic_logo2"
         android:contentDescription="App Logo" />
 
     <TextView

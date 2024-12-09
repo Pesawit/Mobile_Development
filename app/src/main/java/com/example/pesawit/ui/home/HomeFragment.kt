@@ -1,7 +1,7 @@
 package com.example.pesawit.ui.home
 
 import android.os.Bundle
-import android.util.Log
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,11 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
-import com.example.pesawit.data.response.Article
+import com.example.pesawit.data.response.ArticlesItem
 import com.example.pesawit.ui.home.artikel.CreateArticleFragment
 import com.example.pesawit.ui.home.artikel.EditArticleFragment
-import com.example.pesawit.viewmodel.HomeViewModel
-import com.example.pesawit.viewmodel.HomeViewModelFactory
+import com.example.pesawit.viewmodel.viewhome.HomeViewModel
+import com.example.pesawit.viewmodel.viewhome.HomeViewModelFactory
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
@@ -34,28 +34,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi RecyclerView
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Inisialisasi ViewModel
         viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))
             .get(HomeViewModel::class.java)
 
-        // Mendapatkan role pengguna dari arguments
         userRole = arguments?.getString("userRole")
         viewModel.userRole.value = userRole
 
-        // Mengatur visibilitas tombol Create Article
         val btnCreateArticle: View? = view.findViewById(R.id.btn_create_article)
         btnCreateArticle?.visibility = if (userRole == "admin") View.VISIBLE else View.GONE
         btnCreateArticle?.setOnClickListener {
             onCreateArticle()
         }
 
-        // Observasi data artikel
+        // Observe changes to the articles
         viewModel.articles.observe(viewLifecycleOwner) { articles ->
-            Log.d("HomeFragment", "Articles loaded: $articles")
             recyclerView.adapter = if (userRole == "admin") {
                 AdminAdapter(articles, ::onEditArticle, ::onDeleteArticle)
             } else {
@@ -63,13 +58,12 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Memuat data artikel dari ViewModel
+        // Fetch articles from API
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getArticles()
         }
     }
 
-    // Navigasi ke CreateArticleFragment
     private fun onCreateArticle() {
         val createArticleFragment = CreateArticleFragment()
         parentFragmentManager.beginTransaction()
@@ -78,12 +72,10 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
-    // Navigasi ke EditArticleFragment
-    private fun onEditArticle(article: Article) {
-        Log.d("HomeFragment", "Edit article: ${article.title}")
+    private fun onEditArticle(article: ArticlesItem) {
         val editArticleFragment = EditArticleFragment().apply {
             arguments = Bundle().apply {
-                putParcelable("article", article) // Mengirimkan artikel untuk diedit
+                putParcelable("article", article)
             }
         }
         parentFragmentManager.beginTransaction()
@@ -92,9 +84,7 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
-    // Logika penghapusan artikel
-    private fun onDeleteArticle(article: Article) {
-        Log.d("HomeFragment", "Delete article: ${article.title}")
-        // Tambahkan logika penghapusan artikel di sini, misalnya menggunakan ViewModel
+    private fun onDeleteArticle(article: ArticlesItem) {
+        // Handle article deletion
     }
 }

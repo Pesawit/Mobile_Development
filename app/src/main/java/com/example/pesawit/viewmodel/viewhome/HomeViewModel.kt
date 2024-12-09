@@ -1,4 +1,4 @@
-package com.example.pesawit.viewmodel
+package com.example.pesawit.viewmodel.viewhome
 
 import android.content.Context
 import android.util.Log
@@ -6,27 +6,27 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pesawit.data.response.Article
-import com.example.pesawit.data.response.ApiResponse
-import com.example.pesawit.data.response.DataItem
+import com.example.pesawit.data.response.ArticlesItem
 import com.example.pesawit.data.retrofit.ApiConfig
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val context: Context) : ViewModel() {
 
-    private val _articles = MutableLiveData<List<Article>>()
-    val articles: LiveData<List<Article>> = _articles
+    private val _articles = MutableLiveData<List<ArticlesItem>>()
+    val articles: LiveData<List<ArticlesItem>> = _articles
 
     val userRole = MutableLiveData<String?>()
 
+    private val apiService = ApiConfig.provideApiService(context)
+
     init {
-        _articles.postValue(loadDummyArticles())
+        _articles.postValue(loadDummyArticles()) // Initially load dummy data if needed
     }
 
     fun getArticles() {
         viewModelScope.launch {
             try {
-                val response = ApiConfig.provideApiService(context).getArticles()
+                val response = apiService.getArticles()
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.success == true) {
@@ -43,27 +43,10 @@ class HomeViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-    private fun loadDummyArticles(): List<Article> {
-        return listOf(
-            Article(
-                id = "1",
-                title = "Judul Artikel 1",
-                content = "Ini adalah deskripsi singkat untuk artikel pertama.",
-                author = "Author 1",
-                isPublished = true,
-                createdAt = "2024-11-19",
-                updatedAt = "2024-11-20",
-                imageUrl = "url/to/image1",
-                tags = listOf("Tag1", "Tag2")
-            )
-        )
-    }
-
-
-    fun createArticle(article: Article) {
+    fun createArticle(article: ArticlesItem) {
         viewModelScope.launch {
             try {
-                val response = ApiConfig.provideApiService(context).createArticle(article)
+                val response = apiService.createArticle(article)
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.success == true) {
@@ -84,9 +67,7 @@ class HomeViewModel(private val context: Context) : ViewModel() {
         }
     }
 
-
-
-    fun editArticle(articleId: String, updatedArticle: Article) {
+    fun editArticle(articleId: String, updatedArticle: ArticlesItem) {
         _articles.value = _articles.value?.map {
             if (it.id == articleId) updatedArticle else it
         }
@@ -94,5 +75,22 @@ class HomeViewModel(private val context: Context) : ViewModel() {
 
     fun deleteArticle(articleId: String) {
         _articles.value = _articles.value?.filter { it.id != articleId }
+    }
+
+    private fun loadDummyArticles(): List<ArticlesItem> {
+        // Optionally use dummy data for initial loading or testing
+        return listOf(
+            ArticlesItem(
+                id = "1",
+                title = "Judul Artikel 1",
+                content = "Ini adalah deskripsi singkat untuk artikel pertama.",
+                author = "Author 1",
+                isPublished = true,
+                createdAt = "2024-11-19",
+                updatedAt = "2024-11-20",
+                image = "url/to/image1",
+                tags = listOf("Tag1", "Tag2")
+            )
+        )
     }
 }

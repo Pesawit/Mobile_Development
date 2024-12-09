@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.pesawit.R
 import com.example.pesawit.viewmodel.ProfileViewModel
@@ -34,7 +33,6 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate layout untuk fragment
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
@@ -46,75 +44,56 @@ class ProfileFragment : Fragment() {
         btnEditProfile = view.findViewById(R.id.btn_edit_profile)
         btnLogout = view.findViewById(R.id.btn_logout)
 
-        // Observasi data user
         profileViewModel.userData.observe(viewLifecycleOwner) { user ->
-            user?.let {
+            user?.data?.let { data ->
                 Glide.with(requireContext())
-                    .load(it.image ?: R.drawable.default_profile)
+                    .load(data.photo ?: R.drawable.default_profile)
                     .placeholder(R.drawable.default_profile)
                     .into(ivProfilePicture)
-                tvUsername.text = it.name ?: "Nama tidak tersedia"
+                tvUsername.text = data.name ?: "Nama tidak tersedia"
             }
         }
 
-        // Tombol Edit Profil
-        btnEditProfile.setOnClickListener {
-            showEditProfileDialog() // Tampilkan dialog untuk mengedit profil
-        }
+        btnEditProfile.setOnClickListener { showEditProfileDialog() }
 
-        // Unggah Foto Profil
         ivProfilePicture.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
-                type = "image/*"
-            }
+            val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
             startActivityForResult(intent, REQUEST_IMAGE_PICK)
         }
 
-        // Tombol Logout
-        btnLogout.setOnClickListener {
-            profileViewModel.logout()
-        }
+        btnLogout.setOnClickListener { profileViewModel.logout() }
     }
 
-    // Fungsi untuk menangani hasil unggahan gambar
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
             val imageUri = data?.data
             imageUri?.let {
-                Glide.with(requireContext())
-                    .load(it)
-                    .into(ivProfilePicture)
-                profileViewModel.updateProfileImage(it.toString()) // Update gambar profil di ViewModel
+                Glide.with(requireContext()).load(it).into(ivProfilePicture)
+                profileViewModel.updateProfileImage(it.toString())
             }
         }
     }
 
-    // Fungsi untuk menampilkan dialog edit profil
     private fun showEditProfileDialog() {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_profile, null)
+        val dialogView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.dialog_edit_profile, null)
         val etName = dialogView.findViewById<EditText>(R.id.et_name)
         val etEmail = dialogView.findViewById<EditText>(R.id.et_email)
-        val etPhone = dialogView.findViewById<EditText>(R.id.et_phone)
 
-        // Setel data lama di dialog
-        profileViewModel.userData.value?.let { user ->
-            etName.setText(user.name)
-            etEmail.setText(user.email)
-            etPhone.setText(user.noTelp)
+        profileViewModel.userData.value?.data?.let { data ->
+            etName.setText(data.name)
+            etEmail.setText(data.email)
         }
 
-        // Tampilkan dialog untuk edit profil
         AlertDialog.Builder(requireContext())
             .setTitle("Edit Profile")
             .setView(dialogView)
             .setPositiveButton("Save") { _, _ ->
-                val name = etName.text.toString()
-                val email = etEmail.text.toString()
-                val phone = etPhone.text.toString()
-
-                // Update data user di ViewModel
-                profileViewModel.updateUserData(name, email, phone)
+                profileViewModel.updateUserData(
+                    etName.text.toString(),
+                    etEmail.text.toString()
+                )
             }
             .setNegativeButton("Cancel", null)
             .show()

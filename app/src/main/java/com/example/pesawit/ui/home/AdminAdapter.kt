@@ -7,12 +7,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
-import com.example.pesawit.data.response.Article
+import com.example.pesawit.data.response.ArticlesItem
 
 class AdminAdapter(
-    private val articles: List<Article>,
-    private val onEditClick: (Article) -> Unit,
-    private val onDeleteClick: (Article) -> Unit
+    private val articles: List<ArticlesItem>,
+    private val onEditClick: (ArticlesItem) -> Unit,
+    private val onDeleteClick: (ArticlesItem) -> Unit
 ) : RecyclerView.Adapter<AdminAdapter.AdminViewHolder>() {
 
     inner class AdminViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,19 +30,11 @@ class AdminAdapter(
 
     override fun onBindViewHolder(holder: AdminViewHolder, position: Int) {
         val article = articles[position]
-
         holder.tvTitle.text = article.title ?: "No Title"
         holder.tvStatus.text = if (article.isPublished == true) "Published" else "Unpublished"
 
-        // Tombol Edit
-        holder.btnEdit.setOnClickListener {
-            onEditClick(article) // Memanggil callback edit dengan artikel terkait
-        }
-
-        // Tombol Delete
-        holder.btnDelete.setOnClickListener {
-            onDeleteClick(article) // Memanggil callback delete dengan artikel terkait
-        }
+        holder.btnEdit.setOnClickListener { onEditClick(article) }
+        holder.btnDelete.setOnClickListener { onDeleteClick(article) }
     }
 
     override fun getItemCount(): Int = articles.size
