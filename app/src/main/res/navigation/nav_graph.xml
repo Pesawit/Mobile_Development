@@ -8,13 +8,12 @@
         android:id="@+id/homeFragment"
         android:name="com.example.pesawit.ui.home.HomeFragment"
         android:label="Home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+        <argument
+            android:name="userRole"
+            app:argType="string" />
+    </fragment>
 
-    <activity
-        android:id="@+id/profileActivity"
-        android:name="com.example.pesawit.ui.profile.ProfileActivity"
-        android:label="Profile"
-        tools:layout="@layout/activity_profile" />
 
     <fragment
         android:id="@+id/cameraFragment"
@@ -27,4 +26,10 @@
         android:name="com.example.pesawit.ui.history.HistoryFragment"
         android:label="History"
         tools:layout="@layout/fragment_history" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.pesawit.ui.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
 </navigation>

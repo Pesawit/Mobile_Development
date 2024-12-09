@@ -23,20 +23,26 @@ class AdminAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdminViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_article_admin, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_article_admin, parent, false)
         return AdminViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: AdminViewHolder, position: Int) {
         val article = articles[position]
 
-        // Set data to the views
-        holder.tvTitle.text = article.title ?: "No Title"  // Handle null value
+        holder.tvTitle.text = article.title ?: "No Title"
         holder.tvStatus.text = if (article.isPublished == true) "Published" else "Unpublished"
 
-        // Set listeners for buttons
-        holder.btnEdit.setOnClickListener { onEditClick(article) }
-        holder.btnDelete.setOnClickListener { onDeleteClick(article) }
+        // Tombol Edit
+        holder.btnEdit.setOnClickListener {
+            onEditClick(article) // Memanggil callback edit dengan artikel terkait
+        }
+
+        // Tombol Delete
+        holder.btnDelete.setOnClickListener {
+            onDeleteClick(article) // Memanggil callback delete dengan artikel terkait
+        }
     }
 
     override fun getItemCount(): Int = articles.size

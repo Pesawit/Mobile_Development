@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import retrofit2.Response
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var etUsername: EditText
@@ -56,34 +57,37 @@ class RegisterActivity : AppCompatActivity() {
                     runOnUiThread {
                         if (response.isSuccessful) {
                             val apiResponse = response.body()
-                            if (apiResponse?.success == true) {
+                            if (apiResponse?.message == "User registered successfully") {
+                                Log.d("RegisterSuccess", "Server message: ${apiResponse.message}")
                                 ToastHelper.showToast(this@RegisterActivity, "Registration successful!")
-                                finish() // Menutup activity jika registrasi sukses
+                                finish() // Close activity on success
                             } else {
                                 Log.e("RegisterError", "Server message: ${apiResponse?.message}")
                                 ToastHelper.showToast(this@RegisterActivity, "Registration failed: ${apiResponse?.message}")
                             }
                         } else {
-                            Log.e("RegisterError", "HTTP error: ${response.code()} - ${response.message()}")
-
-                            response.errorBody()?.let { errorBody ->
-                                try {
-                                    val errorString = errorBody.string()
-                                    Log.e("RegisterError", "Error response body: $errorString")
-
-                                    val jsonError = JSONObject(errorString)
-                                    val errorDetail = jsonError.optString("detail", "No detail available")
-                                    Log.e("RegisterError", "Error detail: $errorDetail")
-                                } catch (e: Exception) {
-                                    Log.e("RegisterError", "Error parsing error body: ${e.localizedMessage}")
-                                }
-                            }
-
-                            // Show a Toast with the error message
-                            ToastHelper.showToast(this@RegisterActivity, "Registration failed: ${response.message()}")
+                            handleError(response)
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun handleError(response: Response<*>) {
+        Log.e("RegisterError", "HTTP error: ${response.code()} - ${response.message()}")
+
+        response.errorBody()?.let { errorBody ->
+            try {
+                val errorString = errorBody.string()
+                Log.e("RegisterError", "Error response body: $errorString")
+
+                val jsonError = JSONObject(errorString)
+                val errorDetail = jsonError.optString("detail", "No detail available")
+                Log.e("RegisterError", "Error detail: $errorDetail")
+                ToastHelper.showToast(this@RegisterActivity, "Registration failed: $errorDetail")
+            } catch (e: Exception) {
+                Log.e("RegisterError", "Error parsing error body: ${e.localizedMessage}")
             }
         }
     }

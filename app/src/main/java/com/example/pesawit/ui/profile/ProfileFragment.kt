@@ -1,38 +1,48 @@
 package com.example.pesawit.ui.profile
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.example.pesawit.R
 import com.example.pesawit.data.response.ResponseItem
 import com.example.pesawit.viewmodel.ProfileViewModel
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileFragment : Fragment() {
 
     private lateinit var ivProfilePicture: ImageView
     private lateinit var tvUsername: TextView
     private lateinit var btnEditProfile: Button
     private lateinit var btnLogout: Button
-    private lateinit var profileViewModel: ProfileViewModel
+    private val profileViewModel: ProfileViewModel by activityViewModels()
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate layout untuk fragment
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        ivProfilePicture = findViewById(R.id.iv_profile_picture)
-        tvUsername = findViewById(R.id.tv_username)
-        btnEditProfile = findViewById(R.id.btn_edit_profile)
-        btnLogout = findViewById(R.id.btn_logout)
+        ivProfilePicture = view.findViewById(R.id.iv_profile_picture)
+        tvUsername = view.findViewById(R.id.tv_username)
+        btnEditProfile = view.findViewById(R.id.btn_edit_profile)
+        btnLogout = view.findViewById(R.id.btn_logout)
 
         // Observasi perubahan data user
-        profileViewModel.userData.observe(this) { user ->
+        profileViewModel.userData.observe(viewLifecycleOwner) { user ->
             user?.let {
                 // Setel gambar profil menggunakan Glide
-                Glide.with(this)
+                Glide.with(requireContext())
                     .load(it.image)  // Pastikan image URL valid atau gunakan gambar default jika null
                     .placeholder(R.drawable.default_profile)  // Placeholder jika URL null
                     .into(ivProfilePicture)
@@ -43,10 +53,10 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         // Observasi logout
-        profileViewModel.isLoggedOut.observe(this) { isLoggedOut ->
+        profileViewModel.isLoggedOut.observe(viewLifecycleOwner) { isLoggedOut ->
             if (isLoggedOut) {
                 // Tindakan setelah logout, misalnya kembali ke layar login
-                finish()
+                requireActivity().finish()
             }
         }
 
@@ -68,11 +78,3 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 }
-
-private fun getUserData(): ResponseItem {
-    return ResponseItem(
-        image = "https://example.com/profile.jpg",
-        name = "John Doe"
-    )
-}
-

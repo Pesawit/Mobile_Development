@@ -156,7 +156,7 @@ data class Article(
 	val imageUrl: String? = null,
 
 	@field:SerializedName("is_published")
-	val isPublished: Boolean? = null,
+	var isPublished: Boolean? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
@@ -165,10 +165,10 @@ data class Article(
 	val id: String? = null,
 
 	@field:SerializedName("title")
-	val title: String? = null,
+	var title: String? = null,
 
 	@field:SerializedName("content")
-	val content: String? = null,
+	var content: String? = null,
 
 	@field:SerializedName("tags")
 	val tags: List<String?>? = null

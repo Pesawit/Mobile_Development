@@ -7,5 +7,6 @@
     <string name="History">History</string>
     <string name="Profile">Profile</string>
     <string name="default_web_client_id">YOUR_CLIENT_ID.apps.googleusercontent.com</string>
+    <string name="create_article">create\n</string>
 
 </resources>

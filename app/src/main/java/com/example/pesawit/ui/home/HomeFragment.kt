@@ -1,92 +1,100 @@
 package com.example.pesawit.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
 import com.example.pesawit.data.response.Article
+import com.example.pesawit.ui.home.artikel.CreateArticleFragment
+import com.example.pesawit.ui.home.artikel.EditArticleFragment
 import com.example.pesawit.viewmodel.HomeViewModel
+import com.example.pesawit.viewmodel.HomeViewModelFactory
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: RecyclerView.Adapter<*>
-    private lateinit var viewModel: HomeViewModel  // Deklarasi viewMode
-
-    // Sample data
-    private val dummyArticles: List<Article>
-        get() = listOf(
-            Article(
-                id = "1",
-                title = "Judul Artikel 1",
-                createdAt = "2024-11-19",
-                content = "Ini adalah deskripsi singkat untuk artikel pertama.",
-                author = "Author 1",
-                isPublished = true,
-                updatedAt = "2024-11-20",
-                imageUrl = "url/to/image1",
-                tags = listOf("Tag1", "Tag2")
-            ),
-            Article(
-                id = "2",
-                title = "Judul Artikel 2",
-                createdAt = "2024-11-18",
-                content = "Deskripsi artikel kedua yang cukup menarik.",
-                author = "Author 2",
-                isPublished = false,
-                updatedAt = "2024-11-19",
-                imageUrl = "url/to/image2",
-                tags = listOf("Tag3", "Tag4")
-            ),
-            Article(
-                id = "3",
-                title = "Judul Artikel 3",
-                createdAt = "2024-11-17",
-                content = "Artikel ini membahas sesuatu yang sangat penting.",
-                author = "Author 3",
-                isPublished = true,
-                updatedAt = "2024-11-18",
-                imageUrl = "url/to/image3",
-                tags = listOf("Tag5", "Tag6")
-            )
-        )
-
-    private var userRole: String? = null  // Will be set from MainActivity
+    private lateinit var viewModel: HomeViewModel
+    private var userRole: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
-        viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        // Observe articles LiveData
+        // Inisialisasi RecyclerView
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Inisialisasi ViewModel
+        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))
+            .get(HomeViewModel::class.java)
+
+        // Mendapatkan role pengguna dari arguments
+        userRole = arguments?.getString("userRole")
+        viewModel.userRole.value = userRole
+
+        // Mengatur visibilitas tombol Create Article
+        val btnCreateArticle: View? = view.findViewById(R.id.btn_create_article)
+        btnCreateArticle?.visibility = if (userRole == "admin") View.VISIBLE else View.GONE
+        btnCreateArticle?.setOnClickListener {
+            onCreateArticle()
+        }
+
+        // Observasi data artikel
         viewModel.articles.observe(viewLifecycleOwner) { articles ->
-            val adapter = if (viewModel.userRole.value == "admin") {
+            Log.d("HomeFragment", "Articles loaded: $articles")
+            recyclerView.adapter = if (userRole == "admin") {
                 AdminAdapter(articles, ::onEditArticle, ::onDeleteArticle)
             } else {
                 UserAdapter(articles)
             }
-            recyclerView.adapter = adapter
         }
 
-        // Set user role from arguments
-        val role = arguments?.getString("userRole") ?: "user"
-        viewModel.setUserRole(role)
-
-        return view
+        // Memuat data artikel dari ViewModel
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.getArticles()
+        }
     }
+
+    // Navigasi ke CreateArticleFragment
+    private fun onCreateArticle() {
+        val createArticleFragment = CreateArticleFragment()
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, createArticleFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    // Navigasi ke EditArticleFragment
     private fun onEditArticle(article: Article) {
-        // Implement editing logic here
+        Log.d("HomeFragment", "Edit article: ${article.title}")
+        val editArticleFragment = EditArticleFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("article", article) // Mengirimkan artikel untuk diedit
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, editArticleFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
+    // Logika penghapusan artikel
     private fun onDeleteArticle(article: Article) {
-        // Implement delete logic here
+        Log.d("HomeFragment", "Delete article: ${article.title}")
+        // Tambahkan logika penghapusan artikel di sini, misalnya menggunakan ViewModel
     }
 }
