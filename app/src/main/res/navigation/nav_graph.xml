@@ -14,7 +14,6 @@
             app:argType="string" />
     </fragment>
 
-
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.example.pesawit.ui.camera.CameraFragment"
@@ -33,6 +32,24 @@
             app:argType="string" />
     </fragment>
 
+    <fragment
+        android:id="@+id/articleListFragment"
+        android:name="com.example.pesawit.ui.home.artikel.ArticleListFragment"
+        android:label="Article List"
+        tools:layout="@layout/fragment_article_list">
+        <action
+            android:id="@+id/action_articleListFragment_to_articleDetailFragment"
+            app:destination="@id/articleDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/articleDetailFragment"
+        android:name="com.example.pesawit.ui.home.artikel.ArticleDetailFragment"
+        android:label="Article Detail">
+        <argument
+            android:name="article"
+            app:argType="com.example.pesawit.data.response.ArticlesItem" />
+    </fragment>
 
     <fragment
         android:id="@+id/historyFragment"

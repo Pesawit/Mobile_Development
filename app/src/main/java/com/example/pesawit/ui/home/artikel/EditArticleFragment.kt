@@ -65,7 +65,7 @@ class EditArticleFragment : Fragment() {
             it.isPublished = isPublished
 
             // Call the ViewModel to update the article
-            (activity as HomeFragment).viewModel.editArticle(it.id, it)
+            it.id?.let { it1 -> (activity as HomeFragment).viewModel.editArticle(it1, it) }
 
             Toast.makeText(requireContext(), "Article updated successfully!", Toast.LENGTH_SHORT).show()
 

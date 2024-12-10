@@ -11,7 +11,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.pesawit.R
 import com.example.pesawit.data.response.ArticlesItem
-import com.example.pesawit.viewmodel.viewhome.HomeViewModel
+import com.example.pesawit.viewmodel.HomeViewModel
+
 
 class CreateArticleFragment : Fragment() {
 

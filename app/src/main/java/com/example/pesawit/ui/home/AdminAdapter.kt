@@ -11,9 +11,11 @@ import com.example.pesawit.data.response.ArticlesItem
 
 class AdminAdapter(
     private val articles: List<ArticlesItem>,
-    private val onEditClick: (ArticlesItem) -> Unit,
-    private val onDeleteClick: (ArticlesItem) -> Unit,
-    private val onItemClick: (ArticlesItem) -> Unit // Menambahkan listener klik item
+    private val onEditClick: (ArticlesItem) -> Unit = {},
+    private val onDeleteClick: (ArticlesItem) -> Unit = {},
+    private val onItemClick: (ArticlesItem) -> Unit = {},
+    private val onReadMoreClick: (ArticlesItem) -> Unit = {}
+
 ) : RecyclerView.Adapter<AdminAdapter.AdminViewHolder>() {
 
     inner class AdminViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -21,6 +23,7 @@ class AdminAdapter(
         val tvStatus: TextView = itemView.findViewById(R.id.tv_status)
         val btnEdit: Button = itemView.findViewById(R.id.btn_edit)
         val btnDelete: Button = itemView.findViewById(R.id.btn_delete)
+        val btnReadMore: Button = itemView.findViewById(R.id.btn_read_more)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdminViewHolder {
@@ -37,8 +40,8 @@ class AdminAdapter(
         holder.btnEdit.setOnClickListener { onEditClick(article) }
         holder.btnDelete.setOnClickListener { onDeleteClick(article) }
 
-        // Menambahkan listener untuk membuka detail artikel saat item diklik
         holder.itemView.setOnClickListener { onItemClick(article) }
+        holder.btnReadMore.setOnClickListener { onReadMoreClick(article) }
     }
 
     override fun getItemCount(): Int = articles.size

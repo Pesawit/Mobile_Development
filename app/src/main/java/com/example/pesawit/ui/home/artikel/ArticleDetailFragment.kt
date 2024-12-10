@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.example.pesawit.R
-import com.example.pesawit.data.response.ArticlesItem
 
 class ArticleDetailFragment : Fragment() {
 
@@ -17,7 +17,8 @@ class ArticleDetailFragment : Fragment() {
     private lateinit var tvTags: TextView
     private lateinit var tvDate: TextView
 
-    private var article: ArticlesItem? = null
+    private val args: ArticleDetailFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,15 +36,14 @@ class ArticleDetailFragment : Fragment() {
         tvTags = view.findViewById(R.id.tv_tags)
         tvDate = view.findViewById(R.id.tv_date)
 
-        // Ambil artikel yang dikirimkan dari argumen
-        article = arguments?.getParcelable("article")
+        val article = args.article
 
         article?.let {
             tvTitle.text = it.title
-            tvAuthor.text = "Author: ${it.author}"
+            tvAuthor.text = getString(R.string.author_label, it.author)
             tvContent.text = it.content
-            tvTags.text = "Tags: ${it.tags?.joinToString(", ")}"
-            tvDate.text = "Published on: ${it.createdAt}"
+            tvTags.text = getString(R.string.tags_label, it.tags?.joinToString(", "))
+            tvDate.text = getString(R.string.published_date_label, it.createdAt)
         }
     }
 }

@@ -15,14 +15,14 @@ import com.example.pesawit.data.response.ArticlesItem
 import com.example.pesawit.ui.home.artikel.ArticleDetailFragment
 import com.example.pesawit.ui.home.artikel.CreateArticleFragment
 import com.example.pesawit.ui.home.artikel.EditArticleFragment
-import com.example.pesawit.viewmodel.viewhome.HomeViewModel
+import com.example.pesawit.viewmodel.HomeViewModel
 import com.example.pesawit.viewmodel.viewhome.HomeViewModelFactory
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var viewModel: HomeViewModel
+    lateinit var viewModel: HomeViewModel
     private var userRole: String? = null
 
     override fun onCreateView(
@@ -59,10 +59,10 @@ class HomeFragment : Fragment() {
                     articles,
                     ::onEditArticle,
                     ::onDeleteArticle,
-                    ::onItemClick // Pass listener ke adapter
+                    ::onReadMoreClick
                 )
             } else {
-                UserAdapter(articles)
+                UserAdapter(articles, ::onReadMoreClick)
             }
         }
 
@@ -107,4 +107,17 @@ class HomeFragment : Fragment() {
     private fun onDeleteArticle(article: ArticlesItem) {
         // Handle article deletion
     }
+
+    private fun onReadMoreClick(article: ArticlesItem) {
+        val articleDetailFragment = ArticleDetailFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable("article", article)
+            }
+        }
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, articleDetailFragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
 }
