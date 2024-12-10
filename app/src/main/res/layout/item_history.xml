@@ -3,6 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:paddingTop="60dp"
+    android:paddingEnd="20dp"
     >
 
     <!-- Toolbar -->
@@ -24,15 +26,6 @@
             android:textStyle="bold" />
 
         <!-- Logo on the Right -->
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="end"
-            android:src="@drawable/ic_logo2"
-            android:contentDescription="App Logo"
-            android:padding="8dp"
-            android:scaleType="centerInside" />
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Content Section -->

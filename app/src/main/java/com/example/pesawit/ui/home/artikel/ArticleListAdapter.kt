@@ -8,8 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.data.response.ArticlesItem
 import com.example.pesawit.databinding.ItemArticleBinding
 
-class ArticleListAdapter(private val onItemClicked: (ArticlesItem) -> Unit) :
-    ListAdapter<ArticlesItem, ArticleListAdapter.ArticleViewHolder>(DiffCallback) {
+class ArticleListAdapter(
+    private val onItemClicked: (ArticlesItem) -> Unit // Pastikan parameter memiliki tipe yang benar
+) : ListAdapter<ArticlesItem, ArticleListAdapter.ArticleViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         val binding = ItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,7 +23,7 @@ class ArticleListAdapter(private val onItemClicked: (ArticlesItem) -> Unit) :
         holder.itemView.setOnClickListener { onItemClicked(article) }
     }
 
-    class ArticleViewHolder(private val binding: ItemArticleBinding) :
+    inner class ArticleViewHolder(private val binding: ItemArticleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(article: ArticlesItem) {

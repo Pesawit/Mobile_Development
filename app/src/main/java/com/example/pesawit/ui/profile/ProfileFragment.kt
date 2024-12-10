@@ -45,6 +45,10 @@ class ProfileFragment : Fragment() {
         btnEditProfile = view.findViewById(R.id.btn_edit_profile)
         btnLogout = view.findViewById(R.id.btn_logout)
 
+        // Fetch user data from server when fragment is created
+        profileViewModel.fetchUserDataFromServer()
+
+        // Observe LiveData for user data
         profileViewModel.userData.observe(viewLifecycleOwner) { user ->
             user?.data?.let { data ->
                 Glide.with(requireContext())
@@ -55,14 +59,20 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        // Edit profile button
         btnEditProfile.setOnClickListener { showEditProfileDialog() }
 
+        // Change profile picture on click
         ivProfilePicture.setOnClickListener {
             val intent = Intent(Intent.ACTION_GET_CONTENT).apply { type = "image/*" }
             startActivityForResult(intent, REQUEST_IMAGE_PICK)
         }
 
-        btnLogout.setOnClickListener { profileViewModel.logout() }
+        // Logout button
+        btnLogout.setOnClickListener {
+            profileViewModel.logout()
+            Toast.makeText(requireContext(), "Logged out successfully", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -76,7 +86,6 @@ class ProfileFragment : Fragment() {
         }
     }
 
-
     private fun showEditProfileDialog() {
         val dialogView = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_edit_profile, null)
@@ -88,8 +97,8 @@ class ProfileFragment : Fragment() {
 
         profileViewModel.userData.value?.data?.let { data ->
             Glide.with(requireContext())
-                .load(data.photo ?: R.drawable.ic_profile)
-                .placeholder(R.drawable.ic_profile)
+                .load(data.photo ?: R.drawable.default_profile)
+                .placeholder(R.drawable.default_profile)
                 .into(ivEditProfilePicture)
             etName.setText(data.name)
             etEmail.setText(data.email)
@@ -115,13 +124,21 @@ class ProfileFragment : Fragment() {
                 if (name.isEmpty() || email.isEmpty()) {
                     Toast.makeText(requireContext(), "Fields cannot be empty!", Toast.LENGTH_SHORT).show()
                 } else {
-                    profileViewModel.updateUserData(name, email)
-                    dialog.dismiss()
+                    profileViewModel.saveUserDataToServer(
+                        name,
+                        email,
+                        onSuccess = {
+                            Toast.makeText(requireContext(), "Profile updated!", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
+                        },
+                        onError = {
+                            Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
+                        }
+                    )
                 }
             }
         }
 
         dialog.show()
     }
-
 }

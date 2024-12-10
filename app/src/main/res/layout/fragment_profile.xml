@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white2">
+    android:background="@color/teal_700">
 
     <!-- Gambar Profil -->
     <ImageView
@@ -58,26 +58,17 @@
         android:paddingBottom="4dp"
         android:fontFamily="sans-serif" />
 
-    <TextView
-        android:id="@+id/tv_phone_number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="+62 812 3456 7890"
-        android:textSize="14sp"
-        android:textColor="#666666"
-        android:paddingBottom="32dp"
-        android:fontFamily="sans-serif" />
+
 
     <!-- Tombol Logout -->
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:textSize="16sp"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#DC3545"
+        android:backgroundTint="#6F4D2A"
+        android:fontFamily="sans-serif-medium"
         android:paddingVertical="12dp"
-        android:fontFamily="sans-serif-medium" />
+        android:text="Logout"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
 </LinearLayout>

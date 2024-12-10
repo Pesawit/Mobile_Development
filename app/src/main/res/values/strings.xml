@@ -8,8 +8,7 @@
     <string name="Profile">Profile</string>
     <string name="default_web_client_id">YOUR_CLIENT_ID.apps.googleusercontent.com</string>
     <string name="create_article">create\n</string>
-    <string name="author_label">Penulis: %s</string>
-    <string name="tags_label">Tag: %s</string>
-    <string name="published_date_label">Tanggal Publikasi: %s</string>
-
-</resources>
+        <string name="author_label">Author: %s</string>
+        <string name="tags_label">Tags: %s</string>
+        <string name="published_date_label">Published Date: %s</string>
+    </resources>

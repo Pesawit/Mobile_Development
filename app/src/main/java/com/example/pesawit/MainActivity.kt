@@ -1,5 +1,6 @@
 package com.example.pesawit
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -11,23 +12,34 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.pesawit.ui.auth.LoginActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.pesawit.ui.home.HomeFragment
 import com.example.pesawit.utils.TokenManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    interface UserRoleCallback {
+        fun onUserRoleReceived(userRole: String?)
+    }
     private lateinit var navController: NavController
     private var userRole: String? = null
     private var authToken: String? = null
+    private var userRoleCallback: UserRoleCallback? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d("MainActivity", "onCreate executed")
         setContentView(R.layout.activity_main)
 
-        // Ambil userRole dari Intent
-        userRole = intent.getStringExtra("userRole")
-        Log.d("MainActivity", "User role: $userRole")
+        // Ambil userRole dari Intent atau SharedPreferences
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        userRole = intent.getStringExtra("userRole") ?: sharedPreferences.getString("userRole", null)
+        Log.d("MainActivity", "Received userRole: $userRole")
+
+        // Simpan userRole ke SharedPreferences jika belum disimpan
+        if (userRole != null) {
+            sharedPreferences.edit().putString("userRole", userRole).apply()
+        }
 
         // Cek autentikasi token
         try {
@@ -43,19 +55,22 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        // Inisialisasi NavController
         try {
-            val navHostFragment = supportFragmentManager
-                .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHostFragment.navController
 
-            // Kirim userRole ke HomeFragment melalui arguments
-            val bundle = Bundle().apply { putString("userRole", userRole) }
-            navController.setGraph(R.navigation.nav_graph, bundle)
+            // Cari HomeFragment dan set callback jika ditemukan
+            val homeFragment = navHostFragment.childFragmentManager.fragments.firstOrNull { it is HomeFragment } as? HomeFragment
+            homeFragment?.let {
+                it.onUserRoleReceived(userRole)
+            }
 
             // Inisialisasi BottomNavigationView
             val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
             bottomNav.setupWithNavController(navController)
 
+            // Atur toolbar
             val toolbar = findViewById<Toolbar>(R.id.toolbar)
             setSupportActionBar(toolbar)
 
@@ -82,5 +97,10 @@ class MainActivity : AppCompatActivity() {
     private fun redirectToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    // Implementasi UserRoleCallback
+    fun setUserRoleCallback(callback: UserRoleCallback) { // Add this method
+        userRoleCallback = callback
     }
 }

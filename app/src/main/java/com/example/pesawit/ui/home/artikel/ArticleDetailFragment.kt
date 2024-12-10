@@ -19,7 +19,6 @@ class ArticleDetailFragment : Fragment() {
 
     private val args: ArticleDetailFragmentArgs by navArgs()
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,10 +39,10 @@ class ArticleDetailFragment : Fragment() {
 
         article?.let {
             tvTitle.text = it.title
-            tvAuthor.text = getString(R.string.author_label, it.author)
+            tvAuthor.text = getString(R.string.author_label, it.author ?: "Unknown Author")
             tvContent.text = it.content
-            tvTags.text = getString(R.string.tags_label, it.tags?.joinToString(", "))
-            tvDate.text = getString(R.string.published_date_label, it.createdAt)
+            tvTags.text = getString(R.string.tags_label, it.tags?.joinToString(", ") ?: "No Tags")
+            tvDate.text = getString(R.string.published_date_label, it.createdAt ?: "Unknown Date")
         }
     }
 }
