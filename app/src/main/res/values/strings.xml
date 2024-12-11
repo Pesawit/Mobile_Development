@@ -11,4 +11,5 @@
         <string name="author_label">Author: %s</string>
         <string name="tags_label">Tags: %s</string>
         <string name="published_date_label">Published Date: %s</string>
+
     </resources>

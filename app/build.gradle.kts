@@ -53,9 +53,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation (libs.play.services.base)
-    implementation(libs.androidx.camera.core)
-    implementation(libs.androidx.camera.lifecycle)
-    implementation(libs.androidx.camera.view)
+    implementation(libs.firebase.firestore.ktx)
 
 
     // Library Testing
@@ -85,9 +83,15 @@ dependencies {
 
     //untuk camera
     implementation (libs.androidx.camera.core)
+    implementation (libs.androidx.camera.lifecycle)
+    implementation (libs.androidx.camera.view)
     implementation (libs.androidx.camera.camera2)
-    implementation (libs.androidx.camera.lifecycle.v110)
-    implementation (libs.androidx.camera.view.v110)
+    implementation (libs.guava)
 
-    implementation("androidx.compose.ui:ui:1.7.5")
+    implementation(libs.androidx.ui)
+
+    implementation (libs.circleimageview)
+    annotationProcessor (libs.compiler)
+
+
 }

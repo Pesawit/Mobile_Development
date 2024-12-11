@@ -10,12 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.pesawit.MainActivity
 import com.example.pesawit.R
 import com.example.pesawit.data.retrofit.ApiConfig
-import com.example.pesawit.utils.ToastHelper
+import com.example.pesawit.utils.ToastUtils
 import com.example.pesawit.utils.TokenManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
@@ -27,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Inisialisasi views
         etEmail = findViewById(R.id.etemail)
         etPassword = findViewById(R.id.etPassword)
         btnLogin = findViewById(R.id.btn_login)
@@ -40,13 +36,12 @@ class LoginActivity : AppCompatActivity() {
             if (validateInput(email, password)) {
                 login(email, password)
             } else {
-                ToastHelper.showToast(this, "Please enter valid credentials")
+                ToastUtils.showToast(this, "Please enter valid credentials")
             }
         }
 
         tvRegister.setOnClickListener {
-            val intent = Intent(this, RegisterActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
     }
 
@@ -63,40 +58,35 @@ class LoginActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         val apiResponse = response.body()
-                        if (apiResponse?.token != null) {
-                            val token = apiResponse.token
-                            val userRole = apiResponse.role
-                            if (token.isNotEmpty()) {
-                                TokenManager.saveToken(this@LoginActivity, token)
+                        val token = apiResponse?.token
+                        val userRole = apiResponse?.user?.role
 
-                                if (userRole == "admin") {
-                                    val intent = Intent(this@LoginActivity, MainActivity::class.java) // Ganti dengan tampilan admin jika ada
-                                    startActivity(intent)
-                                } else {
-                                    val intent = Intent(this@LoginActivity, MainActivity::class.java).apply {
-                                        putExtra("userRole", userRole)
-                                    }
-                                    startActivity(intent)
-                                }
-
-                                finish()
-                            } else {
-                                ToastHelper.showToast(this@LoginActivity, "Login failed: Token not found")
-                            }
+                        if (!token.isNullOrEmpty() && userRole == "admin") {
+                            TokenManager.saveToken(this@LoginActivity, token)
+                            navigateToMainActivity()
                         } else {
-                            ToastHelper.showToast(this@LoginActivity, "Login failed: Invalid response data")
+                            ToastUtils.showToast(this@LoginActivity, "Access Denied: Invalid role")
                         }
                     } else {
-                        Log.e("LoginError", "Response error: ${response.message()}")
-                        ToastHelper.showToast(this@LoginActivity, "Login failed: ${response.message()}")
+                        ToastUtils.showToast(this@LoginActivity, "Login failed: ${response.message()}")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.e("LoginError", "Exception occurred: ${e.localizedMessage}")
-                    ToastHelper.showToast(this@LoginActivity, "An error occurred during login.")
+                    Log.e("LoginError", "Exception: ${e.localizedMessage}")
+                    ToastUtils.showToast(this@LoginActivity, "An error occurred during login.")
                 }
             }
         }
+    }
+
+    private fun handleLoginError(message: String) {
+        Log.e("LoginError", "Login failed: $message")
+        ToastUtils.showToast(this, "Login failed: $message")
+    }
+
+    private fun navigateToMainActivity() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

@@ -39,10 +39,10 @@ class AdminAdapter(
 
         holder.btnEdit.setOnClickListener { onEditClick(article) }
         holder.btnDelete.setOnClickListener { onDeleteClick(article) }
-
-        holder.itemView.setOnClickListener { onItemClick(article) }
         holder.btnReadMore.setOnClickListener { onReadMoreClick(article) }
+        holder.itemView.setOnClickListener { onItemClick(article) }
     }
+
 
     override fun getItemCount(): Int = articles.size
 }

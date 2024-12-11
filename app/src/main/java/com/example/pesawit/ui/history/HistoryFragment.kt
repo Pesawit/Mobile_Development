@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.pesawit.data.response.DetectionHistoryItem
 import com.example.pesawit.databinding.FragmentHistoryBinding
+import com.example.pesawit.viewmodel.HistoryViewModel
 
 class HistoryFragment : Fragment() {
 

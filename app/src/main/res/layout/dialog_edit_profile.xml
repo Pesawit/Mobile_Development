@@ -1,56 +1,66 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white2"
-    android:padding="16dp"
-    android:fitsSystemWindows="true"
-    android:clipToPadding="false"
-    android:paddingTop="80dp">
+    android:layout_height="wrap_content"
+    android:background="@color/teal_700">
 
-    <!-- Foto Profil -->
-    <ImageView
-        android:id="@+id/iv_edit_profile_picture"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_profile"
-        android:background="@drawable/profile_picture_border"
-        android:contentDescription="Profile Picture"
-        android:scaleType="centerCrop" />
-
-    <!-- Tombol Edit Foto -->
-    <Button
-        android:id="@+id/btn_change_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Change Picture"
-        android:textSize="14sp"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#007BFF"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="6dp"
-        android:fontFamily="sans-serif-medium"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Input Nama -->
-    <EditText
-        android:id="@+id/et_name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Name"
-        android:minHeight="48dp" />
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center">
 
-    <!-- Input Email -->
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Email"
-        android:minHeight="48dp" />
+        <!-- Circular Profile Picture -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_edit_profile_picture"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_profile"
+            android:scaleType="centerCrop" />
 
-    <!-- Tombol Save -->
+        <!-- Change Picture Button -->
+        <Button
+            android:id="@+id/btn_change_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Change Picture"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#007BFF"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="6dp"
+            android:fontFamily="sans-serif-medium"
+            android:layout_marginBottom="16dp" />
 
-</LinearLayout>
+        <!-- Name Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+            <EditText
+                android:id="@+id/et_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Name"
+                android:inputType="textPersonName"
+                android:minHeight="48dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Email Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter Email"
+                android:inputType="textEmailAddress"
+                android:minHeight="48dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+</ScrollView>

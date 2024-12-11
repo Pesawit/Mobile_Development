@@ -1,4 +1,4 @@
-package com.example.pesawit.viewmodel.viewhome
+package com.example.pesawit.viewmodel
 
 import android.content.Context
 import android.util.Log

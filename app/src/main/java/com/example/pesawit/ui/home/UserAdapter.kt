@@ -12,26 +12,22 @@ import com.example.pesawit.data.response.ArticlesItem
 class UserAdapter(
     private val articles: List<ArticlesItem>,
     private val onReadMoreClick: (ArticlesItem) -> Unit
-) : RecyclerView.Adapter<UserAdapter.ArticleViewHolder>() {
+) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
-    inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title: TextView = itemView.findViewById(R.id.tv_title)
-        val date: TextView = itemView.findViewById(R.id.tv_date)
-        val description: TextView = itemView.findViewById(R.id.tv_description)
+    inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvTitle: TextView = itemView.findViewById(R.id.tv_title)
         val btnReadMore: Button = itemView.findViewById(R.id.btn_read_more)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_article_user, parent, false)
-        return ArticleViewHolder(view)
+        return UserViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val article = articles[position]
-        holder.title.text = article.title ?: "No Title"
-        holder.date.text = article.createdAt ?: "Unknown Date"
-        holder.description.text = article.content ?: "No Content"
+        holder.tvTitle.text = article.title ?: "No Title"
         holder.btnReadMore.setOnClickListener { onReadMoreClick(article) }
     }
 

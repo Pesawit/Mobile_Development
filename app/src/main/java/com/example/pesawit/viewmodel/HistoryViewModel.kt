@@ -1,4 +1,4 @@
-package com.example.pesawit.ui.history
+package com.example.pesawit.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.pesawit.data.response.DetectionHistoryItem

@@ -67,6 +67,33 @@
         android:textColor="@color/black"
         android:fontFamily="monospace" />
 
+    <RadioGroup
+        android:id="@+id/rg_roles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <RadioButton
+            android:id="@+id/rb_admin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Admin"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
+
+        <RadioButton
+            android:id="@+id/rb_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="User"
+            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black" />
+
+    </RadioGroup>
+
+
     <Button
         android:id="@+id/btn_register"
         android:layout_width="match_parent"

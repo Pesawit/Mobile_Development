@@ -43,16 +43,14 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-        </activity>
-
+            android:exported="true"/>
 
         <activity
             android:name=".ui.auth.RegisterActivity"
             android:exported="true" />
-    </application>
+        </application>
 
 
+    </manifest>
 
 
-</manifest>
