@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.pesawit.R
+import com.example.pesawit.data.response.Article
 
 class ArticleDetailFragment : Fragment() {
 

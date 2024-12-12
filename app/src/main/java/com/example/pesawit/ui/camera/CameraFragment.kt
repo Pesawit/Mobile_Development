@@ -36,26 +36,55 @@ class CameraFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+
         if (allPermissionsGranted()) {
             startCamera()
         } else {
             requestPermissions(arrayOf(android.Manifest.permission.CAMERA), 0)
         }
 
+        // Handle button clicks
         binding.btnCapture.setOnClickListener { takePhoto() }
         binding.btnRetryCapture.setOnClickListener { resetCamera() }
         binding.btnAnalyze.setOnClickListener { navigateToPrediction() }
+        binding.btnUpload.setOnClickListener {
+            Toast.makeText(requireContext(), "Fitur Upload belum tersedia", Toast.LENGTH_SHORT).show()
+        }
 
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
+
+    private fun startCamera() {
+        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
+        cameraProviderFuture.addListener({
+            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
+            val preview = Preview.Builder().build().also {
+                it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+            }
+
+            imageCapture = ImageCapture.Builder().build()
+            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+            try {
+                cameraProvider.unbindAll()
+                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
+            } catch (exc: Exception) {
+                Toast.makeText(requireContext(), "Failed to initialize camera", Toast.LENGTH_SHORT).show()
+            }
+        }, ContextCompat.getMainExecutor(requireContext()))
+    }
+
+    private fun allPermissionsGranted() = ContextCompat.checkSelfPermission(
+        requireContext(), android.Manifest.permission.CAMERA
+    ) == PackageManager.PERMISSION_GRANTED
 
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
@@ -94,30 +123,6 @@ class CameraFragment : Fragment() {
         )
         findNavController().navigate(action)
     }
-
-    private fun startCamera() {
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener({
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            val preview = Preview.Builder().build().also {
-                it.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-            }
-
-            imageCapture = ImageCapture.Builder().build()
-            val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageCapture)
-            } catch (exc: Exception) {
-                Toast.makeText(requireContext(), "Failed to initialize camera", Toast.LENGTH_SHORT).show()
-            }
-        }, ContextCompat.getMainExecutor(requireContext()))
-    }
-
-    private fun allPermissionsGranted() = ContextCompat.checkSelfPermission(
-        requireContext(), android.Manifest.permission.CAMERA
-    ) == PackageManager.PERMISSION_GRANTED
 
     override fun onDestroy() {
         super.onDestroy()

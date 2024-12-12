@@ -1,21 +1,20 @@
 package com.example.pesawit.ui.home
 
+import com.example.pesawit.ui.home.artikel.CreateArticleFragment
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
-import com.example.pesawit.data.response.ArticlesItem
-import com.example.pesawit.ui.home.artikel.ArticleDetailFragment
-import com.example.pesawit.ui.home.artikel.CreateArticleFragment
-import com.example.pesawit.ui.home.artikel.EditArticleFragment
+import com.example.pesawit.data.response.Article
 import com.example.pesawit.viewmodel.HomeViewModel
 import com.example.pesawit.viewmodel.viewhome.HomeViewModelFactory
 import kotlinx.coroutines.launch
@@ -39,52 +38,43 @@ class HomeFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireContext()))
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this, HomeViewModelFactory(requireActivity().application))
             .get(HomeViewModel::class.java)
 
-        // Ambil userRole dari arguments atau SharedPreferences
-        userRole = arguments?.getString("userRole")
-        if (userRole == null) {
-            val sharedPreferences = requireContext().getSharedPreferences("UserPrefs", AppCompatActivity.MODE_PRIVATE)
-            userRole = sharedPreferences.getString("userRole", null)
-            Log.d("HomeFragment", "Retrieved userRole from SharedPreferences: $userRole")
-        }
+        // Get the user role from arguments or SharedPreferences
+        userRole = arguments?.getString("userRole") ?:
+                requireContext().getSharedPreferences("UserPrefs", AppCompatActivity.MODE_PRIVATE)
+                    .getString("userRole", null)
 
-        if (userRole == null) {
-            Log.e("HomeFragment", "userRole is null after checking SharedPreferences and arguments")
-        } else {
-            Log.d("HomeFragment", "Final userRole: $userRole")
-        }
-
+        // Set the user role in ViewModel
         viewModel.userRole.value = userRole
 
-        // Tampilkan tombol create article jika role adalah admin
+        // Show create article button if user is admin
         val btnCreateArticle: View? = view.findViewById(R.id.btn_create_article)
         btnCreateArticle?.visibility = if (userRole == "admin") View.VISIBLE else View.GONE
         btnCreateArticle?.setOnClickListener {
-            onCreateArticle()
+            findNavController().navigate(R.id.action_homeFragment_to_createArticleFragment)
         }
 
-        // Observasi artikel dari ViewModel
+
+        // Observe articles and update the RecyclerView
         viewModel.articles.observe(viewLifecycleOwner) { articles ->
             recyclerView.adapter = if (userRole == "admin") {
-                AdminAdapter(
-                    articles,
-                    ::onEditArticle,
-                    ::onDeleteArticle,
-                    ::onReadMoreClick
-                )
+                AdminAdapter(articles, ::onEditArticle, ::onDeleteArticle, ::onReadMoreClick)
             } else {
                 UserAdapter(articles, ::onReadMoreClick)
             }
         }
 
-        // Ambil artikel dari API
+
+        // Fetch articles from API
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getArticles()
         }
     }
 
+    // Navigate to com.example.pesawit.ui.home.artikel.CreateArticleFragment
     private fun onCreateArticle() {
         val createArticleFragment = CreateArticleFragment()
         parentFragmentManager.beginTransaction()
@@ -93,31 +83,26 @@ class HomeFragment : Fragment() {
             .commit()
     }
 
-    private fun onEditArticle(article: ArticlesItem) {
-        val editArticleFragment = EditArticleFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable("article", article)
-            }
-        }
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, editArticleFragment)
-            .addToBackStack(null)
-            .commit()
+    // Navigate to EditArticleFragment
+    private fun onEditArticle(article: Article) {
+        val action = HomeFragmentDirections.actionHomeFragmentToEditArticleFragment(article)
+        findNavController().navigate(action)
     }
 
-    private fun onDeleteArticle(article: ArticlesItem) {
-        // Handle article deletion
-    }
-
-    private fun onReadMoreClick(article: ArticlesItem) {
-        val articleDetailFragment = ArticleDetailFragment().apply {
-            arguments = Bundle().apply {
-                putParcelable("article", article)
+    // Delete the article
+    private fun onDeleteArticle(article: Article) {
+        article.id?.let {
+            viewModel.deleteArticle(it)
+            Toast.makeText(requireContext(), "Article deleted", Toast.LENGTH_SHORT).show()
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.getArticles()  // Refresh the article list after deletion
             }
         }
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, articleDetailFragment)
-            .addToBackStack(null)
-            .commit()
+    }
+
+    // Navigate to ArticleDetailFragment
+    private fun onReadMoreClick(article: Article) {
+        val action = HomeFragmentDirections.actionHomeFragmentToArticleDetailFragment(article)
+        findNavController().navigate(action)
     }
 }

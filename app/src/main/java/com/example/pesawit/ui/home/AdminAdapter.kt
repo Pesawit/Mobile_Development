@@ -5,16 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.compose.ui.semantics.text
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
-import com.example.pesawit.data.response.ArticlesItem
+import com.example.pesawit.data.response.Article
 
 class AdminAdapter(
-    private val articles: List<ArticlesItem>,
-    private val onEditClick: (ArticlesItem) -> Unit = {},
-    private val onDeleteClick: (ArticlesItem) -> Unit = {},
-    private val onItemClick: (ArticlesItem) -> Unit = {},
-    private val onReadMoreClick: (ArticlesItem) -> Unit = {}
+    private val articles: List<Article>,
+    private val onEditClick: (Article) -> Unit = {},
+    private val onDeleteClick: (Article) -> Unit = {},
+    private val onItemClick: (Article) -> Unit = {},
+    private val onReadMoreClick: (Article) -> Unit = {}
 
 ) : RecyclerView.Adapter<AdminAdapter.AdminViewHolder>() {
 
@@ -34,7 +35,7 @@ class AdminAdapter(
 
     override fun onBindViewHolder(holder: AdminViewHolder, position: Int) {
         val article = articles[position]
-        holder.tvTitle.text = article.title ?: "No Title"
+        holder.tvTitle.text = article.title ?: "No Title" // Sesuaikan akses properti
         holder.tvStatus.text = if (article.isPublished == true) "Published" else "Unpublished"
 
         holder.btnEdit.setOnClickListener { onEditClick(article) }

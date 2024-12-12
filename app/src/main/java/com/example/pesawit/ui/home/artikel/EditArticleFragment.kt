@@ -9,9 +9,11 @@ import android.widget.EditText
 import android.widget.Switch
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.pesawit.R
-import com.example.pesawit.data.response.ArticlesItem
+import com.example.pesawit.data.response.Article
 import com.example.pesawit.ui.home.HomeFragment
+import com.example.pesawit.viewmodel.HomeViewModel
 
 
 class EditArticleFragment : Fragment() {
@@ -21,7 +23,7 @@ class EditArticleFragment : Fragment() {
     private lateinit var switchPublish: Switch
     private lateinit var btnSave: Button
 
-    private var article: ArticlesItem? = null
+    private var article: Article? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,7 +50,7 @@ class EditArticleFragment : Fragment() {
 
         btnSave.setOnClickListener { onSaveArticle() }
     }
-
+    val viewModel: HomeViewModel by activityViewModels()
     private fun onSaveArticle() {
         val updatedTitle = etTitle.text.toString().trim()
         val updatedContent = etContent.text.toString().trim()
@@ -64,8 +66,8 @@ class EditArticleFragment : Fragment() {
             it.content = updatedContent
             it.isPublished = isPublished
 
-            // Call the ViewModel to update the article
-            it.id?.let { it1 -> (activity as HomeFragment).viewModel.editArticle(it1, it) }
+            // Menggunakan ViewModel untuk memperbarui artikel
+            it.id?.let { it1 -> viewModel.editArticle(it1, it) }
 
             Toast.makeText(requireContext(), "Article updated successfully!", Toast.LENGTH_SHORT).show()
 

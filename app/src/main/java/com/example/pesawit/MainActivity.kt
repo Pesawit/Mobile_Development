@@ -17,34 +17,29 @@ import com.example.pesawit.utils.TokenManager
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
-    private var userRole: String? = null
     private var authToken: String? = null
+    private var userRole: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("com.example.pesawit.MainActivity", "onCreate executed")
+        Log.d("MainActivity", "onCreate executed")
         setContentView(R.layout.activity_main)
 
-        // Ambil userRole dari Intent
-        userRole = intent.getStringExtra("userRole")
-
-        // Jika userRole null, coba ambil dari SharedPreferences
-        if (userRole.isNullOrEmpty()) {
-            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-            userRole = sharedPreferences.getString("userRole", null)
-            Log.d("com.example.pesawit.MainActivity", "Retrieved userRole from SharedPreferences: $userRole")
-        }
-
-        // Cek autentikasi token
+        // Retrieve token and user role
         try {
             authToken = TokenManager.getToken(this)
-            if (authToken.isNullOrEmpty()) {
-                Log.e("com.example.pesawit.MainActivity", "Auth token missing, redirecting to Login")
+            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+            userRole = sharedPreferences.getString("userRole", null)
+
+            if (authToken.isNullOrEmpty() || userRole.isNullOrEmpty()) {
+                Log.e("MainActivity", "Auth token or user role missing, redirecting to Login")
                 redirectToLogin()
                 return
             }
+
+            Log.d("MainActivity", "User Role: $userRole")
         } catch (e: Exception) {
-            Log.e("com.example.pesawit.MainActivity", "Error retrieving token: ${e.message}")
+            Log.e("MainActivity", "Error retrieving token or role: ${e.message}")
             redirectToLogin()
             return
         }
@@ -54,10 +49,6 @@ class MainActivity : AppCompatActivity() {
                 .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHostFragment.navController
 
-            // Kirim userRole ke HomeFragment melalui arguments
-            val bundle = Bundle().apply { putString("userRole", userRole) }
-            navController.setGraph(R.navigation.nav_graph, bundle)
-
             // Inisialisasi BottomNavigationView
             val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
             bottomNav.setupWithNavController(navController)
@@ -65,20 +56,54 @@ class MainActivity : AppCompatActivity() {
             val toolbar = findViewById<Toolbar>(R.id.toolbar)
             setSupportActionBar(toolbar)
 
-            val appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.homeFragment,
-                    R.id.cameraFragment,
-                    R.id.historyFragment,
-                    R.id.profileFragment
+            // Configure AppBarConfiguration based on user role
+            val appBarConfiguration = if (userRole == "admin") {
+                // If admin, include all fragments
+                AppBarConfiguration(
+                    setOf(
+                        R.id.homeFragment,
+                        R.id.cameraFragment,
+                        R.id.historyFragment,
+                        R.id.profileFragment
+                    )
                 )
-            )
+            } else {
+                // If regular user, you might want to restrict certain fragments
+                AppBarConfiguration(
+                    setOf(
+                        R.id.homeFragment,
+                        R.id.cameraFragment,
+                        R.id.historyFragment,
+                        R.id.profileFragment
+                    )
+                )
+            }
+
             setupActionBarWithNavController(navController, appBarConfiguration)
 
-            Log.d("com.example.pesawit.MainActivity", "Successfully passed userRole: $userRole")
+            // Optionally, you can modify bottom navigation based on user role
+            configureBottomNavigation(bottomNav)
+
+            // Hide bottom navigation when CameraFragment is displayed
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                if (destination.id == R.id.cameraFragment) {
+                    bottomNav.visibility = BottomNavigationView.GONE
+                } else {
+                    bottomNav.visibility = BottomNavigationView.VISIBLE
+                }
+            }
+
+            Log.d("MainActivity", "NavController successfully initialized")
         } catch (e: Exception) {
-            Log.e("com.example.pesawit.MainActivity", "Error initializing NavController: ${e.message}")
+            Log.e("MainActivity", "Error initializing NavController: ${e.message}")
             finish()
+        }
+    }
+
+    private fun configureBottomNavigation(bottomNav: BottomNavigationView) {
+
+        if (userRole == "admin") {
+
         }
     }
 
@@ -87,7 +112,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun redirectToLogin() {
+        // Clear any stored preferences when logging out
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
+
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    // Optional: Add a method to logout
+    fun logout() {
+        // Clear token
+        TokenManager.clearToken(this)
+
+        // Clear user role from SharedPreferences
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        sharedPreferences.edit().remove("userRole").apply()
+
+        redirectToLogin()
     }
 }

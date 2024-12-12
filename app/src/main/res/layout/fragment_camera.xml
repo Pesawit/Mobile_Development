@@ -3,13 +3,16 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.camera.CameraFragment">
 
+    <!-- Kamera Preview -->
     <androidx.camera.view.PreviewView
         android:id="@+id/viewFinder"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <!-- Gambar yang di-upload -->
     <ImageView
         android:id="@+id/iv_uploaded_image"
         android:layout_width="match_parent"
@@ -17,39 +20,47 @@
         android:scaleType="centerCrop"
         android:visibility="gone" />
 
+    <!-- Tombol di bagian bawah layar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
         android:padding="16dp"
-        android:background="@color/white3"
-        android:layout_gravity="bottom">
+        android:background="@color/WhatFieldSunrise"
+        android:layout_gravity="bottom"
+        android:weightSum="2">
 
+        <!-- Tombol Upload -->
         <ImageButton
             android:id="@+id/btn_upload"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="70dp"
             android:layout_weight="1"
-            android:layout_gravity="start"
-            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/btn_create_bg"
             android:contentDescription="Upload Image"
-            android:src="@drawable/ic_upload"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:src="@android:drawable/ic_menu_upload"
+            android:scaleType="centerInside"
+            android:padding="16dp" />
 
+        <!-- Tombol Capture -->
         <ImageButton
             android:id="@+id/btn_capture"
-            android:layout_width="0dp"
-            android:layout_height="37dp"
-            android:layout_weight="3"
-            android:layout_gravity="center"
-            android:background="?android:attr/selectableItemBackground"
+            android:layout_width="20dp"
+            android:layout_height="70dp"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/btn_create_bg"
             android:contentDescription="Capture"
-            android:src="@drawable/ic_camera"
-            tools:ignore="TouchTargetSizeCheck" />
+            android:src="@android:drawable/ic_menu_camera"
+            android:scaleType="centerInside"
+            android:padding="16dp" />
     </LinearLayout>
 
 
+
+    <!-- Tombol Tindakan Setelah Foto -->
     <LinearLayout
         android:id="@+id/ll_action_buttons"
         android:layout_width="match_parent"
@@ -59,12 +70,14 @@
         android:visibility="gone"
         android:padding="16dp">
 
+        <!-- Tombol Capture Ulang -->
         <Button
             android:id="@+id/btn_retry_capture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Capture Ulang" />
 
+        <!-- Tombol Analisis -->
         <Button
             android:id="@+id/btn_analyze"
             android:layout_width="wrap_content"

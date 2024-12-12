@@ -11,6 +11,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.ui.semantics.dismiss
+import androidx.compose.ui.semantics.text
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
@@ -18,7 +20,6 @@ import com.example.pesawit.R
 import com.example.pesawit.ui.auth.LoginActivity
 import com.example.pesawit.viewmodel.ProfileViewModel
 import de.hdodenhof.circleimageview.CircleImageView
-
 
 class ProfileFragment : Fragment() {
 
@@ -49,19 +50,16 @@ class ProfileFragment : Fragment() {
         btnEditProfile = view.findViewById(R.id.btn_edit_profile)
         btnLogout = view.findViewById(R.id.btn_logout)
 
-        // Fetch user data from server when fragment is created
-        profileViewModel.fetchUserDataFromServer()
-
         // Observe LiveData for user data
         profileViewModel.userData.observe(viewLifecycleOwner) { user ->
-            user?.data?.let { data ->
+            user?.let {
                 Glide.with(requireContext())
-                    .load(data.photo ?: R.drawable.ic_profile)
+                    .load(it.photo ?: R.drawable.ic_profile)
                     .placeholder(R.drawable.ic_profile)
                     .into(ivProfilePicture)
 
-                tvUsername.text = data.name ?: "Nama tidak tersedia"
-                tvEmail.text = data.email ?: "Email tidak tersedia"
+                tvUsername.text = it.name ?: "Nama tidak tersedia"
+                tvEmail.text = it.email ?: "Email tidak tersedia"
             }
         }
 
@@ -106,13 +104,13 @@ class ProfileFragment : Fragment() {
         val etName = dialogView.findViewById<EditText>(R.id.et_name)
         val etEmail = dialogView.findViewById<EditText>(R.id.et_email)
 
-        profileViewModel.userData.value?.data?.let { data ->
+        profileViewModel.userData.value?.let { user ->
             Glide.with(requireContext())
-                .load(data.photo ?: R.drawable.ic_profile)
+                .load(user.photo ?: R.drawable.ic_profile)
                 .placeholder(R.drawable.ic_profile)
                 .into(ivEditProfilePicture)
-            etName.setText(data.name)
-            etEmail.setText(data.email)
+            etName.setText(user.name)
+            etEmail.setText(user.email)
         }
 
         btnChangePicture.setOnClickListener {

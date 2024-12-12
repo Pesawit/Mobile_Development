@@ -2,14 +2,14 @@ package com.example.pesawit.ui.home.artikel.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.pesawit.data.response.ArticlesItem
+import com.example.pesawit.data.response.Article
 
 class ArticleRepository {
 
-    fun getArticles(): LiveData<List<ArticlesItem>> {
-        val articles = MutableLiveData<List<ArticlesItem>>()
+    fun getArticles(): LiveData<List<Article>> {
+        val articles = MutableLiveData<List<Article>>()
         articles.value = listOf(
-            ArticlesItem(
+            Article(
                 id = "1",
                 title = "Title 1",
                 author = "Author 1",
@@ -18,7 +18,7 @@ class ArticleRepository {
                 createdAt = "2024-12-10",
                 isPublished = true // Sesuaikan dengan tipe data Boolean?
             ),
-            ArticlesItem(
+            Article(
                 id = "2",
                 title = "Title 2",
                 author = "Author 2",

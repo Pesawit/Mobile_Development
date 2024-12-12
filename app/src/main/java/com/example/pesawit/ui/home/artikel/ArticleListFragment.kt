@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pesawit.data.response.ArticlesItem
+import com.example.pesawit.data.response.Article
 import com.example.pesawit.databinding.FragmentArticleListBinding
 
 class ArticleListFragment : Fragment() {
@@ -28,7 +28,6 @@ class ArticleListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
 
-        // Set listener untuk navigasi
         adapter = ArticleListAdapter { article ->
             val action =
                 ArticleListFragmentDirections.actionArticleListFragmentToArticleDetailFragment(article)
@@ -38,9 +37,9 @@ class ArticleListFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // Data dummy untuk testing
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         val dummyArticles = listOf(
-            ArticlesItem(
+            Article(
                 id = "1",
                 title = "Sample Article 1",
                 author = "John Doe",
@@ -48,7 +47,7 @@ class ArticleListFragment : Fragment() {
                 tags = listOf("Tag1", "Tag2"),
                 createdAt = "2024-12-10"
             ),
-            ArticlesItem(
+            Article(
                 id = "2",
                 title = "Sample Article 2",
                 author = "Jane Doe",

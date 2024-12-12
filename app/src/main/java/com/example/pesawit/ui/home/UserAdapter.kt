@@ -7,11 +7,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
-import com.example.pesawit.data.response.ArticlesItem
+import com.example.pesawit.data.response.Article
 
 class UserAdapter(
-    private val articles: List<ArticlesItem>,
-    private val onReadMoreClick: (ArticlesItem) -> Unit
+    private val articles: List<Article>,
+    private val onReadMoreClick: (Article) -> Unit
 ) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

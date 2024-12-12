@@ -15,8 +15,8 @@
     <!-- ImageButton yang melayang di atas RecyclerView -->
     <ImageButton
         android:id="@+id/btn_create_article"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="67dp"
+        android:layout_height="60dp"
         android:layout_gravity="bottom|start"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="100dp"

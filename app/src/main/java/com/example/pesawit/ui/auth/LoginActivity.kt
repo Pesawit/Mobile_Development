@@ -7,12 +7,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.pesawit.MainActivity
 import com.example.pesawit.R
 import com.example.pesawit.data.retrofit.ApiConfig
 import com.example.pesawit.utils.ToastUtils
-import com.example.pesawit.utils.TokenManager
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
@@ -46,45 +48,51 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun validateInput(email: String, password: String): Boolean {
-        return email.isNotEmpty() && password.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        return email.isNotEmpty() && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() && password.isNotEmpty()
     }
 
     private fun login(email: String, password: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch {
             try {
-                val requestBody = mapOf("email" to email, "password" to password)
-                val response = ApiConfig.provideApiService(applicationContext).loginUser(requestBody)
+                val loginRequest = mapOf("email" to email, "password" to password)
+                val response = ApiConfig.provideApiService(applicationContext).loginUser(loginRequest)
 
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        val apiResponse = response.body()
-                        val token = apiResponse?.token
-                        val userRole = apiResponse?.user?.role
+                        val loginResponse = response.body()
 
-                        if (!token.isNullOrEmpty() && userRole == "admin") {
-                            TokenManager.saveToken(this@LoginActivity, token)
-                            navigateToMainActivity()
+                        if (loginResponse != null) {
+                            val token = loginResponse.token
+                            val role = loginResponse.role
+
+                            if (token != null && role != null) {
+                                val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+                                sharedPreferences.edit().apply {
+                                    putString("authToken", token)
+                                    putString("userRole", role)
+                                    apply()
+                                }
+                                navigateToMainActivity()
+                            } else {
+                                ToastUtils.showToast(this@LoginActivity, "Login failed: Token or Role is missing.")
+                            }
                         } else {
-                            ToastUtils.showToast(this@LoginActivity, "Access Denied: Invalid role")
+                            ToastUtils.showToast(this@LoginActivity, "Login failed: Response is empty.")
                         }
                     } else {
+                        val errorBody = response.errorBody()?.string()
+                        Log.e("LoginDebug", "Error Body: $errorBody")
                         ToastUtils.showToast(this@LoginActivity, "Login failed: ${response.message()}")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.e("LoginError", "Exception: ${e.localizedMessage}")
+                    Log.e("LoginDebug", "Exception: ${e.localizedMessage}")
                     ToastUtils.showToast(this@LoginActivity, "An error occurred during login.")
                 }
             }
         }
     }
-
-    private fun handleLoginError(message: String) {
-        Log.e("LoginError", "Login failed: $message")
-        ToastUtils.showToast(this, "Login failed: $message")
-    }
-
     private fun navigateToMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()

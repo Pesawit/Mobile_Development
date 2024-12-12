@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.pesawit.R
+import com.example.pesawit.data.response.Register
+import com.example.pesawit.data.response.ResponseAPI
 import com.example.pesawit.data.retrofit.ApiConfig
 import com.example.pesawit.utils.ToastUtils
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,7 +21,6 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var etPassword: EditText
     private lateinit var etConfirmPassword: EditText
     private lateinit var btnRegister: Button
-    private lateinit var radioGroupRole: RadioGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +31,6 @@ class RegisterActivity : AppCompatActivity() {
         etPassword = findViewById(R.id.etPassword)
         etConfirmPassword = findViewById(R.id.et_ulangpassword)
         btnRegister = findViewById(R.id.btn_register)
-        radioGroupRole = findViewById(R.id.rg_roles)
 
         btnRegister.setOnClickListener {
             val username = etUsername.text.toString().trim()
@@ -40,40 +38,60 @@ class RegisterActivity : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
             val confirmPassword = etConfirmPassword.text.toString().trim()
 
-            val selectedRoleId = radioGroupRole.checkedRadioButtonId
-            if (selectedRoleId == -1 || password != confirmPassword) {
-                ToastUtils.showToast(this, "Invalid inputs or passwords do not match")
-                return@setOnClickListener
+            if (validateInput(username, email, password, confirmPassword)) {
+                registerUser(username, email, password, confirmPassword)
+            } else {
+                ToastUtils.showToast(this, "Please fill all fields correctly!")
             }
-
-            val selectedRole = findViewById<RadioButton>(selectedRoleId).text.toString()
-            registerUser(username, email, password, selectedRole)
         }
     }
 
-    private fun registerUser(username: String, email: String, password: String, role: String) {
-        CoroutineScope(Dispatchers.IO).launch {
+    private fun validateInput(username: String, email: String, password: String, confirmPassword: String): Boolean {
+        return username.isNotEmpty() &&
+                email.isNotEmpty() &&
+                android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+                password.isNotEmpty() &&
+                confirmPassword.isNotEmpty() &&
+                password == confirmPassword
+    }
+
+    private fun registerUser(username: String, email: String, password: String, confirmPassword: String) {
+        lifecycleScope.launch {
             try {
                 val requestBody = mapOf(
                     "name" to username,
                     "email" to email,
                     "password" to password,
-                    "role" to role
+                    "confirmPassword" to confirmPassword // Sesuai dengan API
                 )
+                Log.d("RegisterRequest", "Request body: $requestBody")
+
                 val response = ApiConfig.provideApiService(applicationContext).registerUser(requestBody)
 
                 withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        ToastUtils.showToast(this@RegisterActivity, "Registration successful!")
-                        finish()
-                    } else {
-                        ToastUtils.showToast(this@RegisterActivity, "Registration failed: ${response.message()}")
+                    if (!isFinishing) {
+                        if (response.isSuccessful) {
+                            val registerResponse: ResponseAPI<Register>? = response.body()
+                            if (registerResponse?.success == true) {
+                                ToastUtils.showToast(this@RegisterActivity, "Registration successful!")
+                                finish()
+                            } else {
+                                val message = registerResponse?.message ?: "Unknown error"
+                                ToastUtils.showToast(this@RegisterActivity, "Registration failed: $message")
+                            }
+                        } else {
+                            val errorBody = response.errorBody()?.string()
+                            Log.e("RegisterError", "HTTP Error: ${response.code()} - $errorBody")
+                            ToastUtils.showToast(this@RegisterActivity, "Registration failed: ${errorBody ?: response.message()}")
+                        }
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.e("RegisterError", e.localizedMessage ?: "Unknown error")
-                    ToastUtils.showToast(this@RegisterActivity, "An error occurred during registration.")
+                    if (!isFinishing) {
+                        Log.e("RegisterError", "Exception: ${e.localizedMessage}")
+                        ToastUtils.showToast(this@RegisterActivity, "An error occurred during registration.")
+                    }
                 }
             }
         }

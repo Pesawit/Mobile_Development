@@ -4,15 +4,28 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/white2">
+    android:background="@color/teal_700">
 
     <EditText
         android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
         android:paddingTop="60dp"
         android:hint="Enter Article Title"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:layout_marginBottom="8dp" />
+
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Selected Image"
+        android:scaleType="centerCrop"/>
 
     <EditText
         android:id="@+id/et_content"
@@ -20,18 +33,25 @@
         android:layout_height="wrap_content"
         android:hint="Enter Article Content"
         android:inputType="textMultiLine"
-        android:minHeight="100dp" />
+        android:minHeight="100dp"
+        android:textSize="16sp"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/btn_upload_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Upload Image" />
+        android:text="Upload Image"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
 
     <Button
-        android:id="@+id/btn_publish"
+        android:id="@+id/btn_create_article"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Publish Article"
+        android:text="Create Article"
+        android:textSize="16sp"
         android:layout_marginTop="16dp" />
+
 </LinearLayout>

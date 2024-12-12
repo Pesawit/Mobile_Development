@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pesawit.data.response.DetectionHistoryItem
+import com.example.pesawit.data.response.DetectionHistory
 import com.example.pesawit.databinding.FragmentHistoryBinding
 import com.example.pesawit.viewmodel.HistoryViewModel
 
@@ -42,13 +42,13 @@ class HistoryFragment : Fragment() {
 
     private fun loadHistoryData() {
         val dummyData = listOf(
-            DetectionHistoryItem(
+            DetectionHistory(
                 id = "1",
                 image = "https://example.com/image1.jpg",
                 result = "Prediksi: Bunga",
                 createdAt = "2024-12-09"
             ),
-            DetectionHistoryItem(
+            DetectionHistory(
                 id = "2",
                 image = "https://example.com/image2.jpg",
                 result = "Prediksi: Mobil",
