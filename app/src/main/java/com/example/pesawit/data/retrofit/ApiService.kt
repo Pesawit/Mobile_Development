@@ -42,11 +42,15 @@ interface ApiService {
         @Part image: MultipartBody.Part
     ): Response<ApiResponse>
 
-
     @Multipart
-    @POST("detect")
+    @POST("detect")  // Your actual API endpoint here
     suspend fun uploadImage(
         @Part image: MultipartBody.Part,
         @Part("someParam") requestBody: RequestBody
-    ): Response<ResponseAPI<DetectionHistory>>
+    ): Response<DetectionHistory>
+
+
+
+
+
 }

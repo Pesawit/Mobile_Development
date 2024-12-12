@@ -1,6 +1,6 @@
 package com.example.pesawit.ui.home
 
-import com.example.pesawit.ui.home.artikel.CreateArticleFragment
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pesawit.R
 import com.example.pesawit.data.response.Article
-import com.example.pesawit.viewmodel.HomeViewModel
+import com.example.pesawit.ui.home.artikel.ArticleListAdapter
+import com.example.pesawit.viewmodel.viewhome.HomeViewModel
 import com.example.pesawit.viewmodel.viewhome.HomeViewModelFactory
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    lateinit var viewModel: HomeViewModel
+    private lateinit var viewModel: HomeViewModel  // Menjadikan ini private
     private var userRole: String? = null
 
     override fun onCreateView(
@@ -57,7 +58,6 @@ class HomeFragment : Fragment() {
             findNavController().navigate(R.id.action_homeFragment_to_createArticleFragment)
         }
 
-
         // Observe articles and update the RecyclerView
         viewModel.articles.observe(viewLifecycleOwner) { articles ->
             recyclerView.adapter = if (userRole == "admin") {
@@ -68,19 +68,17 @@ class HomeFragment : Fragment() {
         }
 
 
+
         // Fetch articles from API
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.getArticles()
         }
     }
 
-    // Navigate to com.example.pesawit.ui.home.artikel.CreateArticleFragment
-    private fun onCreateArticle() {
-        val createArticleFragment = CreateArticleFragment()
-        parentFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, createArticleFragment)
-            .addToBackStack(null)
-            .commit()
+    // Navigate to ArticleDetailFragment
+    private fun onReadMoreClick(article: Article) {
+        val action = HomeFragmentDirections.actionHomeFragmentToArticleDetailFragment(article)
+        findNavController().navigate(action)
     }
 
     // Navigate to EditArticleFragment
@@ -98,11 +96,5 @@ class HomeFragment : Fragment() {
                 viewModel.getArticles()  // Refresh the article list after deletion
             }
         }
-    }
-
-    // Navigate to ArticleDetailFragment
-    private fun onReadMoreClick(article: Article) {
-        val action = HomeFragmentDirections.actionHomeFragmentToArticleDetailFragment(article)
-        findNavController().navigate(action)
     }
 }

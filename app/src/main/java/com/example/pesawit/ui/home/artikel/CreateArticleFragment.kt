@@ -16,8 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.pesawit.R
-import com.example.pesawit.data.response.Article
-import com.example.pesawit.viewmodel.HomeViewModel
+import com.example.pesawit.viewmodel.viewhome.HomeViewModel
 import com.bumptech.glide.Glide
 import java.io.File
 import java.io.FileOutputStream
@@ -82,8 +81,13 @@ class CreateArticleFragment : Fragment() {
             }
 
             imageFile?.let {
+                // Memanggil ViewModel untuk membuat artikel dengan gambar
                 viewModel.createArticleWithImage(title, content, it)
                 Toast.makeText(requireContext(), "Article created successfully!", Toast.LENGTH_SHORT).show()
+
+                // Panggil getArticles() setelah artikel berhasil dibuat
+                viewModel.getArticles()
+
                 findNavController().navigate(R.id.action_createArticleFragment_to_homeFragment)
             }
         }

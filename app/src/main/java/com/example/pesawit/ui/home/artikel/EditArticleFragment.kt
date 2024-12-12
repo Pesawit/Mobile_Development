@@ -12,8 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.pesawit.R
 import com.example.pesawit.data.response.Article
-import com.example.pesawit.ui.home.HomeFragment
-import com.example.pesawit.viewmodel.HomeViewModel
+import com.example.pesawit.viewmodel.viewhome.HomeViewModel
 
 
 class EditArticleFragment : Fragment() {

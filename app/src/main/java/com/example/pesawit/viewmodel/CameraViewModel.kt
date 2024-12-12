@@ -9,11 +9,7 @@ import java.util.Locale
 
 class CameraViewModel : ViewModel() {
 
-    /**
-     * Membuat file untuk menyimpan foto yang diambil
-     * @param context Context aplikasi
-     * @return File yang akan digunakan untuk menyimpan gambar
-     */
+    @Suppress("unused")
     fun createImageFile(context: Context): File {
         // Membuat nama file unik berdasarkan timestamp
         val timeStamp: String = SimpleDateFormat(

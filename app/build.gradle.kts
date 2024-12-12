@@ -67,6 +67,8 @@ dependencies {
     // Retrofit untuk API calls
     implementation(libs.retrofit2.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     // Kotlin Coroutines
     implementation(libs.kotlinx.coroutines.android)

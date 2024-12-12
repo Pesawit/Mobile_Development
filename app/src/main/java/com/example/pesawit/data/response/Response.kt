@@ -90,6 +90,21 @@ data class Data(
 	@field:SerializedName("content")
 	val content: String? = null,
 
+	@field:SerializedName("result")
+	val result: String? = null,
+
+	@field:SerializedName("detectedAt")
+	val detectedAt: String? = null,
+
+	@field:SerializedName("recommendation")
+	val recommendation: String? = null,
+
+	@field:SerializedName("image")
+	val image: String? = null,
+
+	@field:SerializedName("userId")
+	val userId: String? = null,
+
 	@field:SerializedName("tags")
 	val tags: List<String?>? = null
 ) : Parcelable
@@ -160,7 +175,14 @@ data class DetectionHistory(
 	val userId: String? = null,
 
 	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null
+	val updatedAt: String? = null,
+
+	@field:SerializedName("message")
+	val message: String? = null,
+
+	@field:SerializedName("data")
+	val data: Data? = null,
+
 ) : Parcelable
 
 @Parcelize

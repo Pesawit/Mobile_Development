@@ -1,4 +1,4 @@
-package com.example.pesawit.viewmodel
+package com.example.pesawit.viewmodel.viewhome
 
 import android.app.Application
 import android.util.Log
@@ -9,9 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.pesawit.data.response.Article
 import com.example.pesawit.data.retrofit.ApiConfig
 import kotlinx.coroutines.launch
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
@@ -56,13 +58,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun createArticle(article: Article) {
         viewModelScope.launch {
             try {
-                // Operasi pembuatan artikel dilakukan di background thread
                 val response = apiService.createArticle(article)
                 if (response.isSuccessful) {
                     val apiResponse = response.body()
                     if (apiResponse?.success == true) {
-                        // Menambahkan artikel baru ke daftar artikel yang ada
                         apiResponse.data?.let { createdArticle ->
+                            // Tambahkan artikel baru ke daftar artikel yang ada
                             val updatedArticles = _articles.value.orEmpty() + createdArticle
                             _articles.postValue(updatedArticles)
                             Log.d("HomeViewModel", "Article created successfully: ${createdArticle.title}")
@@ -83,12 +84,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun createArticleWithImage(title: String, content: String, imageFile: File) {
         viewModelScope.launch {
             try {
-                val titlePart = RequestBody.create(MediaType.parse("text/plain"), title)
-                val contentPart = RequestBody.create(MediaType.parse("text/plain"), content)
+                // Use the toMediaType() extension function instead of MediaType.get()
+                val titlePart = title.toRequestBody("text/plain".toMediaType())
+                val contentPart = content.toRequestBody("text/plain".toMediaType())
                 val imagePart = MultipartBody.Part.createFormData(
                     "image",
                     imageFile.name,
-                    RequestBody.create(MediaType.parse("image/*"), imageFile)
+                    imageFile.asRequestBody("image/*".toMediaType())
                 )
 
                 val response = apiService.createArticleWithImage(titlePart, contentPart, imagePart)
@@ -97,7 +99,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     if (apiResponse?.success == true) {
                         apiResponse.data?.let { createdArticle ->
                             val updatedArticles = _articles.value.orEmpty() + createdArticle
-                            _articles.postValue(updatedArticles as List<Article>?) // Perbarui LiveData
+                            _articles.postValue(updatedArticles as List<Article>?)
                             Log.d("HomeViewModel", "Article created successfully with image")
                         }
                     } else {
@@ -111,7 +113,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
-
     // Function to edit an article
     fun editArticle(articleId: String, updatedArticle: Article) {
         _articles.value = _articles.value?.map {
