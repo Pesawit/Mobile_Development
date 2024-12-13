@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.pesawit.data.response.DetectionHistory
+import com.example.pesawit.data.response.History
 import com.example.pesawit.databinding.FragmentHistoryBinding
 import com.example.pesawit.viewmodel.HistoryViewModel
 
@@ -42,16 +42,18 @@ class HistoryFragment : Fragment() {
 
     private fun loadHistoryData() {
         val dummyData = listOf(
-            DetectionHistory(
+            History(
                 id = "1",
-                image = "https://example.com/image1.jpg",
-                result = "Prediksi: Bunga",
+                image = "https://via.placeholder.com/150",
+                result = "Prediksi: White Scale",
+                recommendation = "Rekomendasi: Gunakan insektisida dengan bahan aktif imidakloprid.",
                 createdAt = "2024-12-09"
             ),
-            DetectionHistory(
+            History(
                 id = "2",
-                image = "https://example.com/image2.jpg",
-                result = "Prediksi: Mobil",
+                image = "https://via.placeholder.com/150",
+                result = "Prediksi: Brown Scale",
+                recommendation = "Rekomendasi: Lakukan pemupukan dengan NPK secara berkala.",
                 createdAt = "2024-12-08"
             )
         )

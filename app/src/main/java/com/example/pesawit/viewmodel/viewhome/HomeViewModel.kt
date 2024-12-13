@@ -55,6 +55,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // Function to create an article
+    @Suppress("unused")
     fun createArticle(article: Article) {
         viewModelScope.launch {
             try {
@@ -84,7 +85,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     fun createArticleWithImage(title: String, content: String, imageFile: File) {
         viewModelScope.launch {
             try {
-                // Use the toMediaType() extension function instead of MediaType.get()
+                if (!imageFile.exists()) {
+                    Log.e("HomeViewModel", "Image file does not exist: ${imageFile.absolutePath}")
+                    return@launch
+                }
+                if (!imageFile.canRead()) {
+                    Log.e("HomeViewModel", "Cannot read image file: ${imageFile.absolutePath}")
+                    return@launch
+                }
+
                 val titlePart = title.toRequestBody("text/plain".toMediaType())
                 val contentPart = content.toRequestBody("text/plain".toMediaType())
                 val imagePart = MultipartBody.Part.createFormData(
@@ -103,10 +112,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                             Log.d("HomeViewModel", "Article created successfully with image")
                         }
                     } else {
-                        Log.e("HomeViewModel", "Failed to create article with image: ${apiResponse?.message}")
+                        Log.e("HomeViewModel", "API responded but failed: ${apiResponse?.message}")
                     }
                 } else {
-                    Log.e("HomeViewModel", "Failed to create article with image: ${response.message()}")
+                    Log.e("HomeViewModel", "HTTP error: ${response.code()} - ${response.message()}")
                 }
             } catch (e: Exception) {
                 Log.e("HomeViewModel", "Exception creating article with image: ${e.message}")
@@ -155,7 +164,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 isPublished = true,
                 createdAt = "2024-11-19",
                 updatedAt = "2024-11-20",
-                image = "url/to/image1",
+                image = "https://via.placeholder.com/150",
                 tags = listOf("Tag1", "Tag2")
             )
         )

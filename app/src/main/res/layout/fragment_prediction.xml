@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    android:background="@color/white2">
+    android:background="@color/white">
 
     <!-- ImageView for the predicted image -->
     <ImageView
@@ -20,8 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:background="@color/white"
+        android:background="@color/Mustard"
         android:text="Hasil Prediksi"
+        android:textColor="@color/black"
         android:textSize="18sp" />
 
     <!-- TextView for the recommendation result -->
@@ -30,9 +31,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Rekomendasi: "
+        android:textColor="@color/black"
         android:textSize="16sp"
         android:layout_marginTop="16dp"
-        android:background="@color/white" />
+        android:background="@color/Mustard" />
 
     <!-- ProgressBar to show loading state -->
     <ProgressBar

@@ -65,36 +65,8 @@ data class Register(
 
 @Parcelize
 data class Data(
-
-	@field:SerializedName("updated_at")
-	val updatedAt: String? = null,
-
-	@field:SerializedName("author")
-	val author: String? = null,
-
-	@field:SerializedName("image_url")
-	val imageUrl: String? = null,
-
-	@field:SerializedName("is_published")
-	val isPublished: Boolean? = null,
-
-	@field:SerializedName("created_at")
-	val createdAt: String? = null,
-
-	@field:SerializedName("id")
-	val id: String? = null,
-
-	@field:SerializedName("title")
-	val title: String? = null,
-
-	@field:SerializedName("content")
-	val content: String? = null,
-
 	@field:SerializedName("result")
 	val result: String? = null,
-
-	@field:SerializedName("detectedAt")
-	val detectedAt: String? = null,
 
 	@field:SerializedName("recommendation")
 	val recommendation: String? = null,
@@ -102,11 +74,15 @@ data class Data(
 	@field:SerializedName("image")
 	val image: String? = null,
 
-	@field:SerializedName("userId")
-	val userId: String? = null,
+	@field:SerializedName("detectedAt")
+	val detectedAt: String? = null,
 
-	@field:SerializedName("tags")
-	val tags: List<String?>? = null
+	@field:SerializedName("updated_at")
+	val updatedAt: String? = null,
+
+	@field:SerializedName("created_at")
+	val createdAt: String? = null,
+
 ) : Parcelable
 
 @Parcelize
@@ -153,36 +129,48 @@ data class LoginResponse(
 @Parcelize
 data class DetectionHistory(
 
-	@field:SerializedName("result")
-	val result: String? = null,
-
-	@field:SerializedName("image")
-	val image: String? = null,
-
-	@field:SerializedName("createdAt")
-	val createdAt: String? = null,
-
-	@field:SerializedName("recommendation")
-	val recommendation: String? = null,
-
-	@field:SerializedName("detectedAt")
-	val detectedAt: String? = null,
-
-	@field:SerializedName("id")
-	val id: String? = null,
-
-	@field:SerializedName("userId")
-	val userId: String? = null,
-
-	@field:SerializedName("updatedAt")
-	val updatedAt: String? = null,
-
 	@field:SerializedName("message")
 	val message: String? = null,
 
 	@field:SerializedName("data")
 	val data: Data? = null,
 
+) : Parcelable
+
+@Parcelize
+data class History(
+	@field:SerializedName("id")
+	val id: String? = null,
+
+	@field:SerializedName("userId")
+	val userId: String? = null,
+
+	@field:SerializedName("image")
+	val image: String? = null,
+
+	@field:SerializedName("result")
+	val result: String? = null,
+
+	@field:SerializedName("recommendation")
+	val recommendation: String? = null,
+
+	@field:SerializedName("createdAt")
+	val createdAt: String? = null,
+
+	@field:SerializedName("detectedAt")
+	val detectedAt: String? = null,
+
+	@field:SerializedName("updatedAt")
+	val updatedAt: String? = null,
+) : Parcelable
+
+@Parcelize
+data class DetectionHistoryResponse(
+	@field:SerializedName("message")
+	val message: String? = null,
+
+	@field:SerializedName("List<History>")
+	val data: Data? = null,
 ) : Parcelable
 
 @Parcelize

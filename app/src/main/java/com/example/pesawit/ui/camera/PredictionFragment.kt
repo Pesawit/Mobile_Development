@@ -43,11 +43,16 @@ class PredictionFragment : Fragment() {
         viewModel.uploadImage(imagePart)
 
         // Observe the result and update the UI
-        viewModel.predictionResult.observe(viewLifecycleOwner, { result ->
-            Log.e("PredictionViewModel", "API Error: ${result} ")
-            binding.tvPredictedResult.text = "Hasil Prediksi: ${result?: "Tidak tersedia"}"
-            binding.tvRecommendation.text = "Rekomendasi: ${result?: "Tidak ada rekomendasi"}"
-        })
+        viewModel.predictionResult.observe(viewLifecycleOwner) { result ->
+            if (result?.data != null) {
+                binding.tvPredictedResult.text = "Hasil Prediksi: ${result.data.result ?: "Tidak tersedia"}"
+                binding.tvRecommendation.text = "Rekomendasi: ${result.data.recommendation ?: "Tidak ada rekomendasi"}"
+            } else {
+                binding.tvPredictedResult.text = "Gagal memuat hasil prediksi"
+                binding.tvRecommendation.text = "Tidak ada rekomendasi"
+            }
+        }
+
 
 
 

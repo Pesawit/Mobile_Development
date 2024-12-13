@@ -1,11 +1,11 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingTop="60dp"
-    android:paddingEnd="20dp"
-    >
+    android:paddingEnd="20dp">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -14,7 +14,9 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/ForestFern"
         android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:title="History"
+        app:titleTextColor="@android:color/white">
 
         <!-- Title -->
         <TextView
@@ -23,25 +25,26 @@
             android:text="History"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <!-- Logo on the Right -->
+            android:textStyle="bold"
+            android:paddingStart="8dp" />
     </androidx.appcompat.widget.Toolbar>
 
     <!-- Content Section -->
     <LinearLayout
+        android:id="@+id/content_section"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="8dp"
+        android:layout_height="141dp"
         android:background="@color/back"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/iv_image"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginEnd="8dp"
+            android:contentDescription="@string/image_desc"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_placeholder" />
 
@@ -55,10 +58,19 @@
                 android:id="@+id/tv_prediction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Prediction Result"
+                android:text="Prediction Result : "
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_recommendation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:text="Recommendation:"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/tv_date"

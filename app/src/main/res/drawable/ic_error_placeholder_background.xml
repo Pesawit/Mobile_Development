@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Layer Background Color -->
+    <item>
+        <color android:color="#D65D5B5B" />
+    </item>
+
+    <!-- Layer Error Image -->
+    <item>
+        <bitmap
+            android:src="@drawable/ic_error_placeholder"
+            android:gravity="center" />
+    </item>
+
+</layer-list>

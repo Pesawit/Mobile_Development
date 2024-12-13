@@ -41,10 +41,17 @@ class CameraFragment : Fragment() {
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 10
     }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("CameraFragment", "onCreate called")
+        // Inisialisasi executor lebih awal di lifecycle fragment
+        cameraExecutor = Executors.newSingleThreadExecutor()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
+
     ): View {
         binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
@@ -212,7 +219,11 @@ class CameraFragment : Fragment() {
     }
 
     override fun onDestroy() {
+        Log.d("CameraFragment", "onDestroy called")
+        // Cek apakah executor sudah diinisialisasi sebelum shutdown
+        if (::cameraExecutor.isInitialized && !cameraExecutor.isShutdown) {
+            cameraExecutor.shutdown()
+        }
         super.onDestroy()
-        cameraExecutor.shutdown()
     }
 }

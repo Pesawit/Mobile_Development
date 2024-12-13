@@ -4,6 +4,7 @@ import com.example.pesawit.data.response.ApiResponse
 import com.example.pesawit.data.response.ResponseAPI
 import com.example.pesawit.data.response.Article
 import com.example.pesawit.data.response.DetectionHistory
+import com.example.pesawit.data.response.DetectionHistoryResponse
 import com.example.pesawit.data.response.LoginResponse // Menggunakan LoginRequest
 import com.example.pesawit.data.response.Register// Menggunakan RegisterRequest
 import okhttp3.MultipartBody
@@ -20,7 +21,7 @@ interface ApiService {
         @Body requestBody: Map<String, String>): Response<ResponseAPI<LoginResponse>>
 
     @GET("history")
-    suspend fun getHistory(): Response<ResponseAPI<List<DetectionHistory>>>
+    suspend fun getHistory(): Response<ResponseAPI<List<DetectionHistoryResponse>>>
 
     @GET("articles/{id}")
     suspend fun getArticleDetails(@Path("id") id: String): Response<ResponseAPI<Article>>
@@ -48,7 +49,6 @@ interface ApiService {
         @Part image: MultipartBody.Part,
         @Part("someParam") requestBody: RequestBody
     ): Response<DetectionHistory>
-
 
 
 
